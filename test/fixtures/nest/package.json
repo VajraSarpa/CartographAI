@@ -1,0 +1,1 @@
+{ "name": "nest-fixture", "dependencies": { "@nestjs/core": "10", "@nestjs/common": "10" } }

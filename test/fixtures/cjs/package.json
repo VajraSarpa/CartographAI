@@ -1,0 +1,1 @@
+{ "name": "cjs-fixture", "main": "src/index.js", "dependencies": { "express": "4" } }
