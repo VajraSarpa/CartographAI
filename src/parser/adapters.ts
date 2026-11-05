@@ -1,5 +1,5 @@
 import path from "node:path";
-import { ts } from "ts-morph";
+import ts from "typescript";
 import { decoratorName, type FileFacts } from "./extract";
 import type { FrameworkInfo, Route } from "./types";
 
