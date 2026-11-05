@@ -9,15 +9,25 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "parse": "tsx scripts/parse.ts"
+    "parse": "tsx scripts/parse.ts",
+    "analyze": "tsx --conditions=react-server scripts/analyze.ts",
+    "test:rls": "bash scripts/test-rls.sh",
+    "env:setup": "tsx scripts/env.ts setup",
+    "env:doctor": "tsx scripts/env.ts doctor",
+    "env:check": "tsx scripts/env.ts check"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.9.24",
+    "@supabase/supabase-js": "^2.119.0",
     "@xyflow/react": "^12.12.1",
     "elkjs": "^0.12.1",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "ts-morph": "^28.0.0"
+    "server-only": "^0.0.1",
+    "tar": "^7.5.22",
+    "ts-morph": "^28.0.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
@@ -31,5 +41,8 @@
     "typescript": "^5",
     "vitest": "^3.2.7"
   },
-  "packageManager": "pnpm@12.16.1"
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=20.9"
+  }
 }
