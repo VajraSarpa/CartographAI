@@ -12,6 +12,8 @@
     "parse": "tsx scripts/parse.ts"
   },
   "dependencies": {
+    "@xyflow/react": "^12.12.1",
+    "elkjs": "^0.12.1",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0",

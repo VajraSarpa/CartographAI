@@ -1,26 +1,81 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f7f7f5;
+  --panel: #ffffff;
+  --panel-2: #f1f1ee;
+  --border: #e2e2dc;
+  --fg: #1c1c1a;
+  --muted: #6b6b64;
+  --accent: #3b5bdb;
+  --in: #2f9e44; /* imported-by edges (green) */
+  --out: #e8590c; /* imports edges (amber) */
+  --edge: #9a9a92;
+  --warn: #c92a2a;
+}
+
+.dark {
+  --bg: #111113;
+  --panel: #19191c;
+  --panel-2: #222226;
+  --border: #2e2e33;
+  --fg: #ececec;
+  --muted: #9a9aa2;
+  --accent: #748ffc;
+  --in: #51cf66;
+  --out: #ffa94d;
+  --edge: #5c5c66;
+  --warn: #ff6b6b;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-border: var(--border);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-in: var(--in);
+  --color-out: var(--out);
+  --color-warn: var(--warn);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* React Flow theming */
+.react-flow {
+  --xy-background-color: var(--bg);
+  --xy-edge-stroke: var(--edge);
+  --xy-controls-button-background-color: var(--panel);
+  --xy-controls-button-color: var(--fg);
+  --xy-controls-button-border-color: var(--border);
+  --xy-controls-button-background-color-hover: var(--panel-2);
+  --xy-minimap-background-color: var(--panel);
+}
+.react-flow__node {
+  cursor: pointer;
+}
+.react-flow__handle {
+  opacity: 0;
+  pointer-events: none;
+  width: 4px;
+  height: 4px;
+  min-width: 0;
+  min-height: 0;
 }
