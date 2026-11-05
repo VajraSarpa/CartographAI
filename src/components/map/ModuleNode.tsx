@@ -8,10 +8,12 @@ import { basename } from "./model";
 
 export type ModuleNodeType = Node<{ module: string }, "module">;
 
+const NO_FILES: string[] = [];
+
 function ModuleNodeImpl({ data }: NodeProps<ModuleNodeType>) {
   const { index, highlight, selection, expanded, moduleFanIn, toggleModule, selectFile } = useMap();
   const mod = data.module;
-  const files = index.modules.get(mod) ?? [];
+  const files = index.modules.get(mod) ?? NO_FILES;
   const isOpen = expanded.has(mod);
   const fanIn = moduleFanIn.get(mod) ?? 0;
   const dim = highlight.modules !== null && !highlight.modules.has(mod);
