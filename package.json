@@ -15,7 +15,8 @@
     "env:setup": "tsx scripts/env.ts setup",
     "env:doctor": "tsx scripts/env.ts doctor",
     "env:check": "tsx scripts/env.ts check",
-    "eval": "tsx --conditions=react-server scripts/eval.ts"
+    "eval": "tsx --conditions=react-server scripts/eval.ts",
+    "agent": "tsx --conditions=react-server scripts/agent.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.4.0",
@@ -23,6 +24,7 @@
     "@supabase/supabase-js": "^2.119.0",
     "@xyflow/react": "^12.12.1",
     "elkjs": "^0.12.1",
+    "jose": "^6.2.15",
     "langsmith": "^0.11.8",
     "next": "16.4.5",
     "react": "19.3.0",

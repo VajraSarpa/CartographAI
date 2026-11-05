@@ -36,10 +36,11 @@ export function DetailPane({ explain, ask }: { explain?: ExplainSlot; ask?: Reac
           </button>
         ))}
       </div>
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        {top === "ask" ? (
-          (ask ?? <p className="p-4 text-xs text-muted">Ask is not configured for this deployment.</p>)
-        ) : selection?.kind === "file" ? (
+      <div className={`min-h-0 flex-1 ${top === "ask" ? "" : "hidden"}`}>
+        {ask ?? <p className="p-4 text-xs text-muted">Ask is not configured for this deployment.</p>}
+      </div>
+      <div className={`min-h-0 flex-1 overflow-y-auto ${top === "overview" ? "" : "hidden"}`}>
+        {selection?.kind === "file" ? (
           <FileDetail path={selection.path} explain={explain} />
         ) : selection?.kind === "module" ? (
           <ModuleDetail module={selection.module} explain={explain} />
