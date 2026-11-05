@@ -40,7 +40,7 @@ const GROUPS: Group[] = [
     where: "console.anthropic.com -> Settings -> API keys",
     fields: [
       { key: "ANTHROPIC_API_KEY", label: "API key", secret: true, validate: /^sk-ant-/ },
-      { key: "ANTHROPIC_MODEL", label: "Model", default: "claude-sonnet-5-5", optional: true },
+      { key: "ANTHROPIC_MODEL", label: "Model", default: "claude-opus-5-5", optional: true },
     ],
   },
   {

@@ -21,7 +21,7 @@ export const serverSchema = publicSchema.extend({
   /** optional: raises the GitHub API limit from 60 to 5,000 requests/hour */
   GITHUB_TOKEN: z.string().min(10).optional(),
   ANTHROPIC_API_KEY: z.string().regex(/^sk-ant-/, "must start with sk-ant-"),
-  ANTHROPIC_MODEL: z.string().default("claude-sonnet-5-5"),
+  ANTHROPIC_MODEL: z.string().default("claude-opus-5-5"),
   LANGSMITH_API_KEY: z.string().min(10).optional(),
   LANGSMITH_PROJECT: z.string().default("cartograph"),
   LANGSMITH_ENDPOINT: url.default("https://api.smith.langchain.com"),
