@@ -8,7 +8,7 @@ disable-model-invocation: true
 # Install CartographAI
 
 You are guiding someone through installing CartographAI ("Every connection,
-proven.") on their own computer, from https://github.com/VajraSarpa/cartograph.
+proven.") on their own computer, from https://github.com/VajraSarpa/CartographAI.
 
 ## How to work
 
@@ -73,7 +73,7 @@ Run and report: `git --version`, `node --version`, `corepack --version`.
 
 ## Step 2: get the code
 
-- If the folder doesn't exist: `git clone https://github.com/VajraSarpa/cartograph.git <folder>`.
+- If the folder doesn't exist: `git clone https://github.com/VajraSarpa/CartographAI.git <folder>`.
 - If it exists and is a clone of that repo: `git -C <folder> pull --ff-only`.
 - If it exists and is something else: stop and ask for another folder.
 

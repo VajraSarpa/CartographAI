@@ -70,4 +70,5 @@ first; its rules apply to everything below.
 
 - GitHub About text and topics set; Clerk application renamed to
   "CartographAI". Product name and tagline: **CartographAI**, "Every
-  connection, proven." The repo URL stays `VajraSarpa/cartograph`.
+  connection, proven." The repo was renamed to `VajraSarpa/CartographAI` (2026-11-07); old
+  `VajraSarpa/cartograph` links redirect.

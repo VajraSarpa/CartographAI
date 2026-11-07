@@ -18,13 +18,13 @@ Host your own copy with a guided install. In Claude Code (terminal, or a
 local session in the desktop app):
 
 ```text
-/plugin marketplace add VajraSarpa/cartograph
+/plugin marketplace add VajraSarpa/CartographAI
 /plugin install cartographai@cartographai
 /cartographai:install
 ```
 
 With Claude Code 2.1.275 or later, the first two lines can be one:
-`/plugin install cartographai --marketplace VajraSarpa/cartograph`.
+`/plugin install cartographai --marketplace VajraSarpa/CartographAI`.
 
 The installer runs these steps:
 1. Checks Node 22, Git and pnpm.
@@ -168,7 +168,7 @@ for the security model.
 ## Releases
 
 See [CHANGELOG.md](CHANGELOG.md) and the
-[GitHub Releases](https://github.com/VajraSarpa/cartograph/releases) page.
+[GitHub Releases](https://github.com/VajraSarpa/CartographAI/releases) page.
 
 ## License
 
