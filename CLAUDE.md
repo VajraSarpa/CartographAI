@@ -6,6 +6,9 @@ what breaks two levels out. Ask for an explanation. Ask the repo a question.
 
 @AGENTS.md
 
+**Current work:** read [docs/NEXT.md](docs/NEXT.md) first (state, next steps,
+what runs without keys).
+
 ## Never
 - Never decide two files are connected. An edge exists only when the parser
   resolved a real import to a real file. Not from a file name, a convention,
