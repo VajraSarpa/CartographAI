@@ -6,6 +6,8 @@ import { z } from "zod";
  */
 
 const url = z.url({ protocol: /^https?$/ });
+/** an empty value (`AGENT_URL=`) means "not set" */
+const optionalUrl = z.preprocess((v) => (v === "" ? undefined : v), url.optional());
 
 export const publicSchema = z.object({
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().regex(/^pk_(test|live)_/, "must start with pk_test_ or pk_live_"),
@@ -26,13 +28,13 @@ export const serverSchema = publicSchema.extend({
   LANGSMITH_PROJECT: z.string().default("cartograph"),
   LANGSMITH_ENDPOINT: url.default("https://api.smith.langchain.com"),
   LANGSMITH_TRACING: z.enum(["true", "false"]).default("true"),
-  /** agent service (LangSmith deployment or local `langgraph dev`) */
-  AGENT_URL: url.optional(),
+  /** optional standalone agent (LangSmith deployment or local `langgraph dev`); unset = run Ask in-process */
+  AGENT_URL: optionalUrl,
   /** ES256 private key (PKCS#8 PEM, \n-escaped) for minting agent credentials */
   AGENT_SIGNING_KEY: z.string().min(100).optional(),
   AGENT_SIGNING_KID: z.string().min(1).optional(),
   /** public base URL of this app, used by the agent to call back */
-  APP_URL: url.optional(),
+  APP_URL: optionalUrl,
   /** per-organization limits */
   LIMIT_ANALYSES_PER_DAY: z.coerce.number().int().positive().default(30),
   LIMIT_EXPLAINS_PER_DAY: z.coerce.number().int().positive().default(200),

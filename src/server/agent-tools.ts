@@ -4,7 +4,7 @@ import { buildIndex, insights, reach, summary, type GraphIndex } from "@/graph";
 import { serverEnv } from "@/lib/env";
 import type { ParseResult } from "@/parser/types";
 import { fetchSource } from "./ai/explain";
-import type { AgentClaims } from "./agent-credential";
+import { verifyAgentCredential, type AgentClaims } from "./agent-credential";
 
 interface Loaded {
   map: ParseResult;
@@ -132,4 +132,21 @@ export async function runAgentTool(name: string, L: Loaded, body: Record<string,
     default:
       return null;
   }
+}
+
+export const AGENT_TOOLS = new Set(["repo_overview", "find_files", "file_details", "blast_radius", "dependency_chain", "read_source"]);
+
+/**
+ * One tool call as the agent makes it: verify the credential, load the one
+ * analysis it names AS the credential (RLS), run the tool. Used by the HTTP
+ * endpoint (standalone agent) and by the in-process agent alike, so both
+ * paths get the same checks.
+ */
+export async function callAgentTool(tool: string, token: string, body: Record<string, unknown>): Promise<{ status: number; body: unknown }> {
+  if (!AGENT_TOOLS.has(tool)) return { status: 404, body: { error: "not found" } };
+  const claims = await verifyAgentCredential(token);
+  if (!claims) return { status: 401, body: { error: "unauthorized" } };
+  const loaded = await loadForAgent(token, claims);
+  if (!loaded) return { status: 404, body: { error: "not found" } };
+  return { status: 200, body: await runAgentTool(tool, loaded, body) };
 }

@@ -12,8 +12,8 @@ is checked for paths it was not shown.
 
 Next.js 16 (App Router, Cache Components) · Clerk (teams) · Supabase (Postgres,
 RLS, Realtime) · TypeScript compiler API parser · React Flow + ELK · Claude
-(Anthropic API) · LangSmith (tracing, evals, agent hosting) · LangGraph JS agent
-in `cartograph-agent/` · Vercel.
+(Anthropic API) · LangSmith (tracing, evals) · LangChain/LangGraph JS agent in
+`cartograph-agent/`, run inside the app (or as a separate LangGraph server) · Vercel.
 
 ## Develop
 
@@ -22,8 +22,9 @@ pnpm install
 pnpm env:setup        # prompts for keys (hidden input), writes .env.local
 pnpm env:doctor       # what's missing, never prints values
 pnpm env:check        # verifies each key with its service
-pnpm dev              # http://localhost:3000
-cd cartograph-agent && pnpm install && pnpm dev   # agent on :2024
+pnpm dev              # http://localhost:3000 (Ask runs in-process)
+pnpm dev:agent        # optional: agent as a LangGraph server on :2024
+                      # (set AGENT_URL=http://localhost:2024 to use it, e.g. with LangGraph Studio)
 ```
 
 | Command | What it does |

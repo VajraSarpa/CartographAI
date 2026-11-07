@@ -2,11 +2,13 @@
   "name": "cartograph-agent",
   "private": true,
   "type": "module",
+  "exports": {
+    "./core": "./src/core.ts"
+  },
   "scripts": {
     "dev": "langgraphjs dev --port 2024 --no-browser",
     "typecheck": "tsc --noEmit"
   },
-  "packageManager": "pnpm@12.16.1",
   "dependencies": {
     "@langchain/anthropic": "^1.6.0",
     "@langchain/core": "^1.3.4",
