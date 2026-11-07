@@ -70,10 +70,32 @@ through the folders the repo itself puts on the import path:
   exists, otherwise the project folder.
 - **Several projects in one repo** can import each other only when one lists
   the other as a dependency, or both are in the same uv workspace.
+- **Run commands** count as evidence too. A Procfile, Dockerfile, compose
+  file, Makefile, `app.yaml` or shell script that runs `gunicorn app.main:app`,
+  `uvicorn ...`, `python -m pkg`, `flask --app web` or `python path/script.py`
+  puts that module's folder (or the script's folder) on the path. This only
+  counts when exactly one folder in the repo matches. A folder without an
+  `__init__.py` never shadows a declared dependency with the same name.
 - **Test files** use pytest's rules: the first folder above a test file
   without an `__init__.py` is on the path, plus `pythonpath`. This is off
   under `--import-mode=importlib`.
 - **Relative imports** follow the folder structure.
+
+Frameworks (detected from a declared dependency in pyproject.toml, setup.cfg
+or requirements*.txt):
+
+- **Django** gives roles to the files Django loads by name or setting:
+  settings, `urls.py`, models, views, admin, `apps.py`, migrations,
+  management commands, template tags, `manage.py`/`wsgi.py`/`asgi.py`. There
+  are no routes, because `path()` doesn't say which HTTP methods a view takes.
+- **FastAPI** and **Flask** give roles to the files that create an app, a
+  router or a blueprint, or that define endpoints. Only classes imported from
+  the framework count.
+- **Routes** follow `include_router` / `register_blueprint` from the app down
+  to each endpoint, using each framework's own prefix rules. A route is shown
+  only if every prefix on the way is a plain string. A router that is never
+  included gets no routes, and neither does an app that may be mounted under
+  another prefix (`mount`, `DispatcherMiddleware`).
 
 Everything else gets a reason and no line on the map:
 - standard-library and third-party imports are external

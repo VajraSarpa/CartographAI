@@ -97,6 +97,21 @@ Original brief:
   layouts before building the resolver. Add small fixtures under
   `test/fixtures/` for each layout.
 
+## Step 3: Python framework roles: done
+
+- `packages/lang-python/src/frameworks.ts`. The extractor now also records
+  import bindings, `name = Call(...)` assignments, function decorators, and
+  `include_router` / `register_blueprint` / `mount` calls.
+- Checked against djangoproject.com (Django roles), Flask's tutorial
+  (blueprints and an app factory), and the FastAPI full-stack template. That
+  template shows no routes because its include prefix is
+  `settings.API_V1_STR`. With that prefix written as a plain string, all 23
+  endpoints come out exact.
+- Run commands as import-path evidence (owner's choice, 2026-11-07): see
+  `packages/lang-python/src/runroots.ts`. This is for apps that ship only a
+  requirements.txt.
+- `PARSER_VERSION` is 6.
+
 ## Known follow-ups (small, not urgent)
 
 - Clerk runs as a development instance; a production instance needs a custom

@@ -11,6 +11,8 @@ export interface Root {
 /** One Python project: a folder with pyproject.toml, setup.cfg or setup.py. */
 export interface Project {
   dir: string;
+  /** the config file that declares it (pyproject.toml, setup.cfg or setup.py) */
+  file: string;
   /** normalised distribution name, if declared */
   name: string | null;
   roots: Root[];
@@ -140,6 +142,7 @@ function project(repo: RepoView, dir: string, py: Table | null, cfg: Ini | null,
   for (const v of Object.values(tbl(get(py, "tool", "poetry", "scripts")) ?? {})) if (typeof v === "string") scripts.push(v);
   return {
     dir,
+    file: py ? file : cfg ? cfgFile : `${dir === "." ? "" : dir + "/"}setup.py`,
     name: typeof name === "string" ? normaliseName(name) : null,
     roots,
     deps,

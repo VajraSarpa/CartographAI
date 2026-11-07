@@ -4,15 +4,17 @@ import path from "node:path";
 import type { FinishResult, FrameworkInfo, LanguagePlugin, LanguageSession, RawImport, RepoView } from "cartograph-lang-api";
 import { Language, Parser } from "web-tree-sitter";
 import { extract, type FileFacts } from "./extract";
+import { applyFrameworks, depSources } from "./frameworks";
 import { findProjects, type Project } from "./project";
 import { isTestFile, PythonResolver } from "./resolve";
+import { RUN_FILES, runRoots } from "./runroots";
 
 const ROLES: Record<string, string> = {
   "package-entry": "Package entry points",
   "main-script": "Run as scripts",
   test: "Tests",
 };
-const ENTRY_ROLES: ReadonlySet<string> = new Set(Object.keys(ROLES));
+const ENTRY_ROLES = Object.keys(ROLES);
 
 /** Non-code files the resolver reads. */
 const CONFIG = /(^|\/)(pyproject\.toml|setup\.cfg|pytest\.ini|tox\.ini|requirements[^/]*\.txt)$/;
@@ -50,7 +52,7 @@ export const pythonPlugin: LanguagePlugin = {
   id: "python",
   name: "Python",
   claims: (rel) => rel.endsWith(".py") || rel.endsWith(".pyi"),
-  needsFile: (rel) => CONFIG.test(rel),
+  needsFile: (rel) => CONFIG.test(rel) || RUN_FILES.test(rel),
   init,
   open: (repo) => new PythonSession(repo),
 };
@@ -65,7 +67,8 @@ class PythonSession implements LanguageSession {
   constructor(private readonly repo: RepoView) {
     if (!parser) throw new Error("Python plug-in used before init()");
     this.projects = findProjects(repo).projects;
-    this.resolver = new PythonResolver(repo, this.projects, pytestInUse(repo, this.projects));
+    const deps = new Set(depSources(repo, this.projects).flatMap((d) => [...d.deps]));
+    this.resolver = new PythonResolver(repo, this.projects, pytestInUse(repo, this.projects), runRoots(repo), deps);
   }
 
   skipReason(rel: string): string | null {
@@ -110,17 +113,14 @@ class PythonSession implements LanguageSession {
       if (this.facts.get(f)?.mainGuard || path.posix.basename(f) === "__main__.py") add(f, "main-script");
       if (isTestFile(f)) add(f, "test");
     }
+    const fw = applyFrameworks(this.repo, this.projects, this.resolver, parsed, this.facts);
+    for (const [f, roles] of fw.rolesByFile) for (const r of roles) add(f, r);
     const used = new Set([...rolesByFile.values()].flat());
-    const framework: FrameworkInfo = {
-      id: "none",
-      name: "No framework detected",
-      evidence: null,
-      roles: Object.fromEntries(Object.entries(ROLES).filter(([id]) => used.has(id))),
-      routes: [],
-      supportsRoutes: false,
-      others: [],
-    };
-    return { framework, rolesByFile, entryRoles: ENTRY_ROLES };
+    const common = Object.fromEntries(Object.entries(ROLES).filter(([id]) => used.has(id)));
+    const framework: FrameworkInfo = fw.framework
+      ? { ...fw.framework, roles: { ...fw.framework.roles, ...common } }
+      : { id: "none", name: "No framework detected", evidence: null, roles: common, routes: [], supportsRoutes: false, others: [] };
+    return { framework, rolesByFile, entryRoles: new Set([...ENTRY_ROLES, ...fw.entryRoles]) };
   }
 }
 
