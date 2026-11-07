@@ -291,8 +291,8 @@ importers:
         specifier: workspace:*
         version: link:../lang-api
       smol-toml:
-        specifier: 1.4.2
-        version: 1.4.2
+        specifier: 1.9.1
+        version: 1.9.1
       tree-sitter-python:
         specifier: 0.25.0
         version: 0.25.0
@@ -3186,8 +3186,8 @@ packages:
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
-  smol-toml@1.4.2:
-    resolution: {integrity: sha512-rInDH6lCNiEyn3+hH8KVGFdbjc099j47+OSgbMrfDYX1CmXLfdKd7qi6IfcWj2wFxvSVkuI46M+wPGYfEOEj6g==}
+  smol-toml@1.9.1:
+    resolution: {integrity: sha512-j7WyPdf0CJoutMzMoPLF/bVXHtKZIT9Rb4eGeEbWw8X2t5oirjPgpL+OpaENZrILYaXqYwnVH+qgUwVbl+pUJQ==}
     engines: {node: '>= 18'}
 
   source-map-js@1.2.2:
@@ -6580,7 +6580,7 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
-  smol-toml@1.4.2: {}
+  smol-toml@1.9.1: {}
 
   source-map-js@1.2.2: {}
 

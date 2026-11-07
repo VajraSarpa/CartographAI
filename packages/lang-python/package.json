@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "cartograph-lang-api": "workspace:*",
-    "smol-toml": "1.4.2",
+    "smol-toml": "1.9.1",
     "tree-sitter-python": "0.25.0",
     "web-tree-sitter": "0.25.10"
   }
