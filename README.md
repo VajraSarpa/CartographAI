@@ -75,6 +75,22 @@ through the folders the repo itself puts on the import path:
   under `--import-mode=importlib`.
 - **Relative imports** follow the folder structure.
 
+Frameworks (detected from a declared dependency in pyproject.toml, setup.cfg
+or requirements*.txt):
+
+- **Django** gives roles to the files Django loads by name or setting:
+  settings, `urls.py`, models, views, admin, `apps.py`, migrations,
+  management commands, template tags, `manage.py`/`wsgi.py`/`asgi.py`. There
+  are no routes, because `path()` doesn't say which HTTP methods a view takes.
+- **FastAPI** and **Flask** give roles to the files that create an app, a
+  router or a blueprint, or that define endpoints. Only classes imported from
+  the framework count.
+- **Routes** follow `include_router` / `register_blueprint` from the app down
+  to each endpoint, using each framework's own prefix rules. A route is shown
+  only if every prefix on the way is a plain string. A router that is never
+  included gets no routes, and neither does an app that may be mounted under
+  another prefix (`mount`, `DispatcherMiddleware`).
+
 Everything else gets a reason and no line on the map:
 - standard-library and third-party imports are external
 - namespace packages have no file to link to

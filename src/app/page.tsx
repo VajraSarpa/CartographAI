@@ -10,6 +10,9 @@ const FRAMEWORKS = [
   { name: "Express", detail: "routes, controllers, services, models (CommonJS too)" },
   { name: "React", detail: "components, hooks, contexts" },
   { name: "Docusaurus", detail: "site pages, swizzled theme files" },
+  { name: "Django", detail: "settings, URL configs, models, views, admin, migrations, commands" },
+  { name: "FastAPI", detail: "apps, routers, routes through include_router prefixes" },
+  { name: "Flask", detail: "apps, blueprints, routes through url_prefix (app factories too)" },
 ];
 
 const WONT = [
@@ -110,7 +113,7 @@ export default function Home() {
         <section className="space-y-6">
           <h2 className="text-2xl font-semibold">Supported frameworks</h2>
           <p className="max-w-[64ch] text-muted">
-            Any TypeScript, JavaScript or Python repository maps. When a framework is detected from a package.json, its files also get roles by rule, and
+            Any TypeScript, JavaScript or Python repository maps. When a framework is detected from a declared dependency, its files also get roles by rule, and
             routes appear when the code spells out both the method and the full path.
           </p>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

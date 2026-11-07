@@ -144,3 +144,74 @@ describe("python: syntax details", () => {
     expect(rec(r, "helpers")?.status).toBe("failed");
   });
 });
+
+describe("python frameworks: FastAPI", async () => {
+  const r = await parse(fx("fastapi"));
+
+  it("is detected from a declared dependency (requirements.txt counts)", () => {
+    expect(r.framework).toMatchObject({ id: "fastapi", evidence: "requirements.txt depends on fastapi", supportsRoutes: true });
+  });
+
+  it("shows a route only when every prefix from the app down is a plain string", () => {
+    expect(r.framework.routes.map((x) => `${x.method} ${x.path}`)).toEqual([
+      "GET /api/items/", // FastAPI concatenates: "/api" + "/items" + "/"
+      "GET /api/items/{item_id}",
+      "POST /api/items/{item_id}",
+      "GET /health",
+    ]);
+    expect(r.framework.routes.find((x) => x.path === "/health")).toMatchObject({ file: "app/main.py", line: 11 });
+  });
+
+  it("only counts FastAPI/APIRouter imported from fastapi", () => {
+    expect(r.files.find((f) => f.path === "app/fake.py")?.roles).toEqual([]);
+    expect(r.files.find((f) => f.path === "app/main.py")).toMatchObject({ roles: ["fastapi-app", "endpoints"], entry: true });
+  });
+});
+
+describe("python frameworks: Flask", async () => {
+  const r = await parse(fx("flask"));
+
+  it("follows blueprints from an app factory, with Flask's prefix rules and GET by default", () => {
+    expect(r.framework.id).toBe("flask");
+    expect(r.framework.routes.map((x) => `${x.method} ${x.path}`)).toEqual([
+      "GET /",
+      "GET /auth/login",
+      "POST /auth/login",
+      "POST /auth/logout",
+      "GET /staff/dashboard", // register_blueprint(url_prefix=) replaces the blueprint's own
+    ]);
+  });
+
+  it("drops every route when an app may be mounted under another prefix", async () => {
+    const dir = repo({
+      "pyproject.toml": '[project]\nname = "m"\ndependencies = ["flask"]\n',
+      "m/__init__.py": 'from flask import Flask\nfrom werkzeug.middleware.dispatcher import DispatcherMiddleware\napp = Flask(__name__)\n@app.route("/x")\ndef x():\n    return 1\napplication = DispatcherMiddleware(app, {})\n',
+    });
+    const m = await parse(dir);
+    expect(m.framework.id).toBe("flask");
+    expect(m.framework.routes).toEqual([]);
+  });
+});
+
+describe("python frameworks: Django", async () => {
+  const r = await parse(fx("django"));
+
+  it("gives roles to the files Django loads by name, and shows no routes (path() names no method)", () => {
+    expect(r.framework).toMatchObject({ id: "django", supportsRoutes: false, routes: [] });
+    const roles = Object.fromEntries(r.files.filter((f) => f.roles.length).map((f) => [f.path, f.roles]));
+    expect(roles).toMatchObject({
+      "manage.py": expect.arrayContaining(["django-entry", "main-script"]),
+      "site_cfg/settings.py": ["django-settings"],
+      "site_cfg/urls.py": ["url-config"],
+      "site_cfg/wsgi.py": ["django-entry"],
+      "blog/models.py": ["models"],
+      "blog/admin.py": ["admin"],
+      "blog/apps.py": ["app-config"],
+      "blog/migrations/0001_initial.py": ["migration"],
+      "blog/management/commands/publish.py": ["management-command"],
+      "blog/templatetags/blog_tags.py": ["template-tags"],
+    });
+    expect(r.files.find((f) => f.path === "blog/migrations/0001_initial.py")?.entry).toBe(true);
+    expect(r.files.find((f) => f.path === "blog/views.py")?.entry).toBe(false);
+  });
+});
