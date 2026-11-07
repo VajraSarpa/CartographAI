@@ -66,15 +66,8 @@ first; its rules apply to everything below.
   a plain string. Checked on djangoproject.com, Flask's tutorial and the
   FastAPI full-stack template.
 
-## GitHub "About" text (owner sets this on github.com)
+## Done by the owner (2026-11-07)
 
-Product name: **CartographAI**, tagline "Every connection, proven." (owner's
-choice, 2026-11-07). The repo URL stays `VajraSarpa/cartograph`.
-
-> CartographAI: every connection, proven. Paste a public TypeScript,
-> JavaScript or Python repo and get a map: folders are boxes, imports are
-> lines. See what breaks before you change a file, then ask the repo a
-> question.
-
-The Clerk application's name (shown on the sign-in screen) is set in the
-Clerk dashboard, not in code.
+- GitHub About text and topics set; Clerk application renamed to
+  "CartographAI". Product name and tagline: **CartographAI**, "Every
+  connection, proven." The repo URL stays `VajraSarpa/cartograph`.
