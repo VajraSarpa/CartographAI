@@ -100,8 +100,11 @@ With a file selected, the right panel has two buttons:
 ### Roles and Insights (left rail)
 
 - **Roles** come from framework rules. Examples: Next.js pages, Nest
-  controllers, Express servers, HTML script entries. A **Routes** list shows
-  only routes whose method and full path are both written in the code.
+  controllers, Express servers, HTML script entries, Django migrations and
+  URL configs, FastAPI routers, Flask blueprints. A **Routes** list shows
+  only routes whose method and full path are both written in the code
+  (Next.js, Nest, FastAPI, Flask; never Django, whose `path()` names no
+  method).
   Click a role to filter the map to those files; **Clear filter** undoes it.
 - **Insights** lists facts the graph can show: **Import cycles**, **Heavy
   fan-in** (files many others import), **Large files (500+ lines)**, and
@@ -116,9 +119,9 @@ quality: the graph cannot know.
 | Number | Meaning |
 |---|---|
 | Files parsed | Code files read |
-| Files skipped | Code files too big to read (listed, never hidden) |
+| Files skipped | Code files not read: too big, binary, minified, or type-only (`.d.ts`, `.pyi`). Listed with the reason, never hidden |
 | Imports resolved | Import statements that point at a file in this repository. The map footer's "connections" count is lower: several imports between the same two files draw one line |
-| External packages | Imports of npm packages (not drawn) |
+| External packages | Imports of npm or Python packages and the Python standard library (not drawn) |
 | Not resolved (with reason) | Imports the parser could not match, each with its reason |
 | Lines | Total lines of code |
 

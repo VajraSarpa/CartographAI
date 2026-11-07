@@ -18,7 +18,7 @@ import { MAX_FILE_BYTES, walk } from "./walk";
 export * from "./types";
 
 export interface ParseOptions {
-  /** enabled languages, in priority order (first to claim a file owns it); default TypeScript/JavaScript */
+  /** enabled languages, in priority order (first to claim a file owns it); default TypeScript/JavaScript only (the app passes CARTOGRAPH_LANGUAGES) */
   languages?: readonly LanguagePlugin[];
   maxFiles?: number;
   /** real sizes of files the fetcher wrote as empty placeholders (too large to keep) */

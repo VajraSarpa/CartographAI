@@ -30,6 +30,8 @@ separately on LangSmith Deployments is optional (step 4).
    GitHub's 60/hour anonymous limit), `AGENT_SIGNING_KEY`, `AGENT_SIGNING_KID`,
    and `ENABLE_EXPERIMENTAL_COREPACK=1` (uses the pinned pnpm version).
    Leave out `APP_URL` and `AGENT_URL` (both point at localhost in `.env.local`).
+   Optional: `CARTOGRAPH_LANGUAGES` (default `typescript,python`; see README
+   "Languages").
    Tip: paste the whole `.env.local` into the first Key field, then delete
    those two rows.
 3. Functions region: same region as Supabase. Fluid compute on (the pipeline
