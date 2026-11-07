@@ -142,3 +142,26 @@ describe("parser: untrusted input", () => {
     expect(r.edges).toHaveLength(1);
   });
 });
+
+import { parseRepoUrl } from "@/lib/repo-url";
+describe("repo URLs", () => {
+  it.each([
+    ["https://github.com/vercel/next.js", { owner: "vercel", name: "next.js", ref: null }],
+    ["github.com/vercel/next.js.git", { owner: "vercel", name: "next.js", ref: null }],
+    ["vercel/next.js", { owner: "vercel", name: "next.js", ref: null }],
+    ["https://github.com/a/b/tree/canary", { owner: "a", name: "b", ref: "canary" }],
+    ["https://github.com/a/b/", { owner: "a", name: "b", ref: null }],
+  ])("accepts %s", (url, want) => expect(parseRepoUrl(url)).toEqual(want));
+  it.each(["https://gitlab.com/a/b", "https://evil.com/github.com/a/b", "a", "a/../b", "-a/b", "https://github.com/a/b/blob/main/x.ts", "a/b c"])(
+    "rejects %s",
+    (url) => expect(parseRepoUrl(url)).toBeNull(),
+  );
+});
+
+describe("parser: placeholders", () => {
+  it("reports placeholder files at their real size as skipped", async () => {
+    const r = await parseRepo(fx("esm"), { sizeOverrides: new Map([["src/util/orphan.ts", 5_000_000]]) });
+    expect(r.skipped.find((s) => s.path === "src/util/orphan.ts")?.reason).toContain("larger than 1 MB");
+    expect(r.stats.filesFound).toBe(r.stats.filesParsed + r.stats.filesSkipped);
+  });
+});

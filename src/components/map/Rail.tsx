@@ -119,7 +119,7 @@ export function Rail() {
       </Section>
 
       <div className="mt-auto px-3 py-2 text-[11px] text-muted">
-        {data.map.stats.filesParsed} files · {data.map.stats.edges} imports drawn · {data.map.stats.filesSkipped} skipped
+        {data.map.stats.filesParsed} files · {data.map.stats.edges} connections · {data.map.stats.filesSkipped} skipped
       </div>
     </aside>
   );

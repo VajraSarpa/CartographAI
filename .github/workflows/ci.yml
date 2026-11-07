@@ -37,3 +37,28 @@ jobs:
       - name: gitleaks
         run: |
           docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.24.3 git /repo --redact --exit-code 1
+  rls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-timeout 2s --health-retries 20
+    env:
+      PGPASSWORD: test
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: apply migrations and run RLS isolation tests
+        run: |
+          P="psql -h localhost -U postgres -v ON_ERROR_STOP=1 -q"
+          $P -c "create database carto"
+          $P -d carto -f supabase/tests/supabase-shim.sql
+          for f in supabase/migrations/*.sql; do $P -d carto -f "$f"; done
+          $P -d carto -f supabase/tests/rls.test.sql 2>&1 | tee rls.log
+          ! grep -q FAIL rls.log

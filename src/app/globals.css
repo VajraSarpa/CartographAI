@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* "system" follows the OS; .light / .dark are explicit choices from the theme control */
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
@@ -30,6 +31,22 @@
   --warn: #ff6b6b;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: #111113;
+    --panel: #19191c;
+    --panel-2: #222226;
+    --border: #2e2e33;
+    --fg: #ececec;
+    --muted: #9a9aa2;
+    --accent: #748ffc;
+    --in: #51cf66;
+    --out: #ffa94d;
+    --edge: #5c5c66;
+    --warn: #ff6b6b;
+  }
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-panel: var(--panel);
@@ -50,6 +67,11 @@ html {
 }
 html.dark {
   color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  html:not(.light) {
+    color-scheme: dark;
+  }
 }
 
 body {

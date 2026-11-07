@@ -28,7 +28,7 @@ what breaks two levels out. Ask for an explanation. Ask the repo a question.
 
 ## Stack
 - Next.js 16 App Router (async request APIs, `proxy.ts` not `middleware.ts`),
-  Clerk (orgs), Supabase (Postgres + RLS + realtime), ts-morph parser,
+  Clerk (orgs), Supabase (Postgres + RLS + realtime), TypeScript compiler-API parser,
   React Flow + ELK layout, Anthropic Claude for Explain and the agent,
   LangSmith for tracing/evals and agent hosting. Deployed on Vercel.
 

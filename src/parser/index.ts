@@ -19,6 +19,8 @@ export * from "./types";
 
 export interface ParseOptions {
   maxFiles?: number;
+  /** real sizes of files the fetcher wrote as empty placeholders (too large to keep) */
+  sizeOverrides?: Map<string, number>;
   /** called after each file so long runs can report progress */
   onProgress?: (done: number, total: number) => void;
 }
@@ -32,7 +34,7 @@ const MAX_HTML_BYTES = 200_000;
  */
 export async function parseRepo(root: string, opts: ParseOptions = {}): Promise<ParseResult> {
   root = path.resolve(root);
-  const { code, allFiles } = await walk(root, opts.maxFiles);
+  const { code, allFiles } = await walk(root, opts.maxFiles, opts.sizeOverrides);
   const resolver = new Resolver(root, allFiles);
   configureWorkspaces(root, allFiles, resolver);
 

@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFileSync } from "node:fs";
-import { ts } from "ts-morph";
+import ts from "typescript";
 import { isCodeFile, isDeclarationFile, toPosix } from "./walk";
 import type { ImportStatus } from "./types";
 

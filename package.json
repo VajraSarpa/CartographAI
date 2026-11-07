@@ -4,20 +4,36 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:agent": "pnpm -C cartograph-agent exec langgraphjs dev --no-browser --port 2024",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "parse": "tsx scripts/parse.ts"
+    "parse": "tsx scripts/parse.ts",
+    "analyze": "tsx --conditions=react-server scripts/analyze.ts",
+    "test:rls": "bash scripts/test-rls.sh",
+    "env:setup": "tsx scripts/env.ts setup",
+    "env:doctor": "tsx scripts/env.ts doctor",
+    "env:check": "tsx scripts/env.ts check",
+    "eval": "tsx --conditions=react-server scripts/eval.ts",
+    "agent": "tsx --conditions=react-server scripts/agent.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.4.0",
+    "@clerk/nextjs": "^7.9.24",
+    "@supabase/supabase-js": "^2.119.0",
     "@xyflow/react": "^12.12.1",
     "elkjs": "^0.12.1",
+    "jose": "^6.2.15",
+    "langsmith": "^0.11.8",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "ts-morph": "^28.0.0"
+    "server-only": "^0.0.1",
+    "tar": "^7.5.22",
+    "typescript": "~5.9.3",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
@@ -28,8 +44,10 @@
     "eslint-config-next": "16.4.5",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
-    "typescript": "^5",
     "vitest": "^3.2.7"
   },
-  "packageManager": "pnpm@12.16.1"
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=22"
+  }
 }

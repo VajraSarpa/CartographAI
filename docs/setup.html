@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="rupa-theme:cyan">
+<title>Cartograph account setup</title>
+<style>/* Rupa cyan theme: Vajra's Cyan Signature deck look for documents.
+   Deep navy, one cyan accent, Hanken Grotesk with JetBrains Mono labels.
+   Screen CSS for both `cyan` and `cyan-dark`; their PDFs differ only in
+   their print layers (cyan.print.css, cyan-dark.print.css). */
+:root {
+  --bg-top: #0b1120;
+  --bg-bottom: #111a2b;
+  --ink: #e6edf6;
+  --muted: #9fb0c8;
+  --label: #6b7d98;
+  --accent: #38bdf8;
+  --ok: #3fb950;
+  --panel: rgba(22, 32, 50, 0.62);
+  --rule: #2a3650;
+  --code-bg: rgba(11, 17, 32, 0.72);
+  --mono: "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
+  --measure: 48rem;
+}
+* { box-sizing: border-box; }
+img { max-width: 100%; height: auto; } /* never wider than the text column, aspect ratio kept */
+html {
+  background:
+    radial-gradient(ellipse 900px 520px at 50% 0%, rgba(56, 189, 248, 0.13), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(var(--bg-top), var(--bg-bottom));
+  background-color: var(--bg-top);
+  min-height: 100%;
+}
+body {
+  margin: 0 auto;
+  padding: 4rem 1rem 5rem;
+  max-width: var(--measure);
+  font: 400 17px/1.65 "Hanken Grotesk", Inter, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+}
+
+/* Pill badge with a green dot, as on the title and section slides. The dot
+   is a background, not a character, so PDF text stays one colour. */
+.byline, main h1::before {
+  display: table; /* shrinks to fit, in browsers and WeasyPrint alike */
+  padding: .3rem .9rem .3rem 1.7rem;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at .85rem 50%, var(--ok) 0 .22rem, transparent .26rem),
+    rgba(56, 189, 248, 0.08);
+  font: 600 .72rem/1.4 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Cover: centred, two-tone headline (title in ink, subtitle in cyan) */
+.cover {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* centring shrinks the title in WeasyPrint */
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.cover .byline { order: -1; margin: 0 auto 1.5rem; }
+.doc-title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--ink);
+}
+.subtitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin: .35rem 0 0;
+  max-width: 40rem;
+  align-self: center;
+}
+
+/* Contents: a rounded panel */
+.toc {
+  margin: 0 0 3rem;
+  padding: 1.1rem 1.4rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+}
+.toc h2 {
+  font: 600 .72rem/1.4 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--label);
+  margin: 0 0 .6rem;
+  border: 0;
+  padding: 0;
+}
+.toc ol { margin: 0; padding-left: 1.25rem; }
+.toc a { color: var(--ink); text-decoration: none; }
+.toc li.l1 { font-weight: 700; margin-top: .5rem; list-style: none; margin-left: -1.25rem; }
+.toc li.l2 { list-style: none; color: var(--muted); }
+.toc li.l2 a { color: var(--muted); }
+.toc a:hover { color: var(--accent); }
+
+/* Headings: white, with any **bold** phrase in cyan */
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); }
+main { counter-reset: part; }
+main h1 { counter-increment: part; font-size: 2.2rem; font-weight: 800; margin: 3.5rem 0 1.2rem; }
+main h1::before { content: "Part " counter(part); margin-bottom: .9rem; }
+h2 {
+  font-size: 1.55rem;
+  font-weight: 700;
+  margin: 3rem 0 1rem;
+  padding-bottom: .45rem;
+  border-bottom: 1px solid var(--rule);
+}
+h3 { font-size: 1.15rem; font-weight: 700; margin: 2rem 0 .6rem; }
+:is(h1, h2, h3) strong { color: var(--accent); font-weight: inherit; }
+
+/* Body */
+p, ul, ol { margin: 0 0 1rem; }
+li { margin: .25rem 0; }
+li::marker { color: var(--label); }
+a { color: var(--accent); text-decoration-color: rgba(56, 189, 248, 0.4); }
+strong { font-weight: 700; }
+em { color: var(--muted); }
+blockquote {
+  margin: 1.5rem 0;
+  padding: .8rem 1.2rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 12px;
+  color: var(--muted);
+}
+blockquote p:last-child { margin-bottom: 0; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+/* Code: mono, in panels; one ink colour with cyan keywords */
+code {
+  font: 0.86em/1.5 var(--mono);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  padding: .08em .35em;
+  border-radius: 5px;
+  color: #bae6fd;
+}
+pre, pre.hl { /* pre.hl outranks Pygments' own .hl background */
+  background: var(--code-bg);
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  overflow-x: auto;
+}
+pre code { background: none; border: 0; padding: 0; font-size: .82rem; color: var(--ink); }
+.hl * { color: inherit !important; font-style: normal !important; }
+.hl :is(.k, .kc, .kd, .kn, .kr, .nt) { color: var(--accent) !important; }
+.hl :is(.c, .c1, .cm, .ch, .cs) { color: var(--label) !important; }
+
+/* Tables: a panel with a mono header row */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 0 0 1.5rem;
+  font-size: .92rem;
+  display: block;
+  overflow-x: auto;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+}
+th, td {
+  padding: .5rem .7rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rule);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  font: 600 .72rem/1.4 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--label);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+/* Task lists and footnotes */
+.contains-task-list { list-style: none; padding-left: 0; }
+.task-list-item-checkbox { display: inline-block; margin: 0 .5em 0 0; vertical-align: -.1em; accent-color: var(--accent); }
+hr.footnotes-sep { margin: 2rem 0 1rem; }
+.footnotes { font-size: .88em; color: var(--muted); }
+.footnote-ref a { text-decoration: none; }
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hl .hll { background-color: #ffffcc }
+.hl { background: #f8f8f8; }
+.hl .c { color: #3D7B7B; font-style: italic } /* Comment */
+.hl .err { border: 1px solid #F00 } /* Error */
+.hl .k { color: #008000; font-weight: bold } /* Keyword */
+.hl .o { color: #666 } /* Operator */
+.hl .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.hl .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.hl .cp { color: #9C6500 } /* Comment.Preproc */
+.hl .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.hl .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.hl .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.hl .gd { color: #A00000 } /* Generic.Deleted */
+.hl .ge { font-style: italic } /* Generic.Emph */
+.hl .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.hl .gr { color: #E40000 } /* Generic.Error */
+.hl .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.hl .gi { color: #008400 } /* Generic.Inserted */
+.hl .go { color: #717171 } /* Generic.Output */
+.hl .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.hl .gs { font-weight: bold } /* Generic.Strong */
+.hl .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.hl .gt { color: #04D } /* Generic.Traceback */
+.hl .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.hl .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.hl .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.hl .kp { color: #008000 } /* Keyword.Pseudo */
+.hl .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.hl .kt { color: #B00040 } /* Keyword.Type */
+.hl .m { color: #666 } /* Literal.Number */
+.hl .s { color: #BA2121 } /* Literal.String */
+.hl .na { color: #687822 } /* Name.Attribute */
+.hl .nb { color: #008000 } /* Name.Builtin */
+.hl .nc { color: #00F; font-weight: bold } /* Name.Class */
+.hl .no { color: #800 } /* Name.Constant */
+.hl .nd { color: #A2F } /* Name.Decorator */
+.hl .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.hl .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.hl .nf { color: #00F } /* Name.Function */
+.hl .nl { color: #767600 } /* Name.Label */
+.hl .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.hl .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.hl .nv { color: #19177C } /* Name.Variable */
+.hl .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.hl .w { color: #BBB } /* Text.Whitespace */
+.hl .mb { color: #666 } /* Literal.Number.Bin */
+.hl .mf { color: #666 } /* Literal.Number.Float */
+.hl .mh { color: #666 } /* Literal.Number.Hex */
+.hl .mi { color: #666 } /* Literal.Number.Integer */
+.hl .mo { color: #666 } /* Literal.Number.Oct */
+.hl .sa { color: #BA2121 } /* Literal.String.Affix */
+.hl .sb { color: #BA2121 } /* Literal.String.Backtick */
+.hl .sc { color: #BA2121 } /* Literal.String.Char */
+.hl .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.hl .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.hl .s2 { color: #BA2121 } /* Literal.String.Double */
+.hl .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.hl .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.hl .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.hl .sx { color: #008000 } /* Literal.String.Other */
+.hl .sr { color: #A45A77 } /* Literal.String.Regex */
+.hl .s1 { color: #BA2121 } /* Literal.String.Single */
+.hl .ss { color: #19177C } /* Literal.String.Symbol */
+.hl .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.hl .fm { color: #00F } /* Name.Function.Magic */
+.hl .vc { color: #19177C } /* Name.Variable.Class */
+.hl .vg { color: #19177C } /* Name.Variable.Global */
+.hl .vi { color: #19177C } /* Name.Variable.Instance */
+.hl .vm { color: #19177C } /* Name.Variable.Magic */
+.hl .il { color: #666 } /* Literal.Number.Integer.Long */</style>
+</head>
+<body class="html">
+<header class="cover">
+  <h1 class="doc-title">Cartograph account setup</h1>
+  <p class="subtitle">What to create in each service, where each key lives, and how to enter it</p>
+  
+</header>
+
+<nav class="toc"><h2>Contents</h2><ol>
+<li class="l2"><a href="#1-clerk">1. Clerk</a></li>
+<li class="l2"><a href="#2-supabase">2. Supabase</a></li>
+<li class="l2"><a href="#3-anthropic">3. Anthropic</a></li>
+<li class="l2"><a href="#4-langsmith">4. LangSmith</a></li>
+<li class="l2"><a href="#5-github-token-optional-recommended">5. GitHub token (optional, recommended)</a></li>
+<li class="l2"><a href="#6-enter-everything">6. Enter everything</a></li>
+<li class="l2"><a href="#7-what-happens-next">7. What happens next</a></li>
+</ol></nav>
+
+<main>
+
+<p>Do these in order. Clerk comes first because Supabase needs a value from it.
+Never paste a key into chat or a file: every key goes in at the end through
+<code>pnpm env:setup</code>, which hides what you type.</p>
+<h2 id="1-clerk">1. Clerk</h2>
+<p>Site: <a href="http://dashboard.clerk.com">dashboard.clerk.com</a></p>
+<h3 id="set-up">Set up</h3>
+<ol>
+<li>
+<p><strong>Create application.</strong> Name it &quot;Cartograph&quot;. Under sign-in options, tick
+<strong>GitHub</strong> (you can untick Email) and click Create.</p>
+</li>
+<li>
+<p><strong>Turn on teams.</strong> Configure → <strong>Organizations</strong> → Enable. Leave personal
+accounts allowed, so team membership stays optional.</p>
+</li>
+<li>
+<p><strong>Add a claim to the session token.</strong> Configure → <strong>Sessions</strong> →
+<strong>Customize session token</strong>. Paste exactly this, then Save:</p>
+<pre class="hl"><code class="language-json"><span class="p">{</span><span class="w"> </span><span class="nt">"org_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{{org.name}}"</span><span class="w"> </span><span class="p">}</span>
+</code></pre>
+</li>
+<li>
+<p><strong>Connect Supabase.</strong> Go to <a href="http://clerk.com/setup/supabase">clerk.com/setup/supabase</a> (or search the
+dashboard for &quot;Supabase&quot;) → <strong>Activate Supabase integration</strong>. It shows a
+<strong>Clerk domain</strong> like <code>xxx.clerk.accounts.dev</code>. Copy it for step 2.2.</p>
+</li>
+</ol>
+<h3 id="keys-to-enter-later">Keys to enter later</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Where</th>
+<th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publishable key</td>
+<td>Configure → API keys</td>
+<td><code>pk_test_…</code></td>
+</tr>
+<tr>
+<td>Secret key</td>
+<td>Configure → API keys</td>
+<td><code>sk_test_…</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-supabase">2. Supabase</h2>
+<p>Site: <a href="http://supabase.com/dashboard">supabase.com/dashboard</a></p>
+<h3 id="set-up-1">Set up</h3>
+<ol>
+<li><strong>New project.</strong> Pick a US region. Save the database password somewhere
+safe.</li>
+<li><strong>Trust Clerk.</strong> Authentication → <strong>Sign In / Providers</strong> →
+<strong>Third-party Auth</strong> → <strong>Add provider</strong> → <strong>Clerk</strong>. Paste the Clerk domain
+from step 1.4.</li>
+<li><strong>Create the tables.</strong> Open <strong>SQL Editor</strong> → New query. Paste the whole
+contents of <code>supabase/migrations/20261105000000_init.sql</code> and click
+<strong>Run</strong>. It should say &quot;Success. No rows returned&quot;.</li>
+</ol>
+<h3 id="keys-to-enter-later-1">Keys to enter later</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Where</th>
+<th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project URL</td>
+<td>Project Settings → Data API</td>
+<td><code>https://&lt;ref&gt;.supabase.co</code></td>
+</tr>
+<tr>
+<td>Publishable key</td>
+<td>Project Settings → API Keys</td>
+<td><code>sb_publishable_…</code></td>
+</tr>
+<tr>
+<td>Secret key</td>
+<td>Project Settings → API Keys</td>
+<td><code>sb_secret_…</code></td>
+</tr>
+</tbody>
+</table>
+<p>If only &quot;legacy&quot; keys show, click <strong>Create new API keys</strong>.</p>
+<h2 id="3-anthropic">3. Anthropic</h2>
+<p>Site: <a href="http://console.anthropic.com">console.anthropic.com</a></p>
+<ol>
+<li><strong>Plans &amp; Billing.</strong> Add a card and some credit. $10 is plenty for
+testing.</li>
+<li>Settings → <strong>API Keys</strong> → <strong>Create Key</strong>, named &quot;cartograph&quot;. The key
+(<code>sk-ant-…</code>) is shown once, so leave the page open until you have entered
+it.</li>
+</ol>
+<h2 id="4-langsmith">4. LangSmith</h2>
+<p>Site: <a href="http://smith.langchain.com">smith.langchain.com</a> (US region)</p>
+<p>Settings → <strong>API Keys</strong> → <strong>Create API Key</strong> → <strong>Personal Access Token</strong>.
+Copy the key (<code>lsv2_…</code>). It is shown once.</p>
+<h2 id="5-github-token-optional-recommended">5. GitHub token (optional, recommended)</h2>
+<p>Site: <a href="http://github.com/settings/personal-access-tokens">github.com/settings/personal-access-tokens</a></p>
+<p><strong>Generate new token</strong> (fine-grained):</p>
+<ul>
+<li>Repository access: <strong>Public repositories</strong></li>
+<li>Permissions: none</li>
+<li>Expiration: 90 days</li>
+</ul>
+<p>The token starts with <code>github_pat_…</code>. Without it, Vercel's shared servers
+quickly hit GitHub's limit of 60 anonymous requests an hour.</p>
+<h2 id="6-enter-everything">6. Enter everything</h2>
+<p>In a terminal (the VS Code terminal works):</p>
+<pre class="hl"><code class="language-bash"><span class="nb">cd</span><span class="w"> </span>~/Projects/CartogrphAI/cartograph
+pnpm<span class="w"> </span>env:setup
+</code></pre>
+<p>It asks for each value in order. What you type for a secret stays hidden.
+Pressing Enter keeps the default shown in brackets. It writes <code>.env.local</code>
+and <code>cartograph-agent/.env</code>, readable only by you and ignored by git.</p>
+<p>To check what is still missing without showing any values:</p>
+<pre class="hl"><code class="language-bash">pnpm<span class="w"> </span>env:doctor
+</code></pre>
+<h2 id="7-what-happens-next">7. What happens next</h2>
+<p>Vercel needs nothing yet. Once the keys are in:</p>
+<ol>
+<li><code>pnpm env:check</code> confirms every key with its service.</li>
+<li><code>pnpm agent key</code> generates the agent's signing key. You import it once in
+Supabase (Project Settings → JWT Keys → <strong>Create standby key</strong> → import
+the private key), then the file is deleted.</li>
+<li>End-to-end test: sign in, analyze a repo, map, Explain, Ask.</li>
+<li>Deploy the app to Vercel and the agent to LangSmith.</li>
+</ol>
+
+</main>
+</body>
+</html>
