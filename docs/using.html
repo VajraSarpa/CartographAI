@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="rupa-theme:cyan">
+<title>Using Cartograph</title>
+<style>/* Rupa cyan theme: Vajra's Cyan Signature deck look for documents.
+   Deep navy, one cyan accent, Hanken Grotesk with JetBrains Mono labels.
+   Screen CSS for both `cyan` and `cyan-dark`; their PDFs differ only in
+   their print layers (cyan.print.css, cyan-dark.print.css). */
+:root {
+  --bg-top: #0b1120;
+  --bg-bottom: #111a2b;
+  --ink: #e6edf6;
+  --muted: #9fb0c8;
+  --label: #6b7d98;
+  --accent: #38bdf8;
+  --ok: #3fb950;
+  --panel: rgba(22, 32, 50, 0.62);
+  --rule: #2a3650;
+  --code-bg: rgba(11, 17, 32, 0.72);
+  --mono: "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
+  --measure: 48rem;
+}
+* { box-sizing: border-box; }
+img { max-width: 100%; height: auto; } /* never wider than the text column, aspect ratio kept */
+html {
+  background:
+    radial-gradient(ellipse 900px 520px at 50% 0%, rgba(56, 189, 248, 0.13), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(var(--bg-top), var(--bg-bottom));
+  background-color: var(--bg-top);
+  min-height: 100%;
+}
+body {
+  margin: 0 auto;
+  padding: 4rem 1rem 5rem;
+  max-width: var(--measure);
+  font: 400 17px/1.65 "Hanken Grotesk", Inter, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+}
+
+/* Pill badge with a green dot, as on the title and section slides. The dot
+   is a background, not a character, so PDF text stays one colour. */
+.byline, main h1::before {
+  display: table; /* shrinks to fit, in browsers and WeasyPrint alike */
+  padding: .3rem .9rem .3rem 1.7rem;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at .85rem 50%, var(--ok) 0 .22rem, transparent .26rem),
+    rgba(56, 189, 248, 0.08);
+  font: 600 .72rem/1.4 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Cover: centred, two-tone headline (title in ink, subtitle in cyan) */
+.cover {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* centring shrinks the title in WeasyPrint */
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.cover .byline { order: -1; margin: 0 auto 1.5rem; }
+.doc-title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--ink);
+}
+.subtitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin: .35rem 0 0;
+  max-width: 40rem;
+  align-self: center;
+}
+
+/* Contents: a rounded panel */
+.toc {
+  margin: 0 0 3rem;
+  padding: 1.1rem 1.4rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+}
+.toc h2 {
+  font: 600 .72rem/1.4 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--label);
+  margin: 0 0 .6rem;
+  border: 0;
+  padding: 0;
+}
+.toc ol { margin: 0; padding-left: 1.25rem; }
+.toc a { color: var(--ink); text-decoration: none; }
+.toc li.l1 { font-weight: 700; margin-top: .5rem; list-style: none; margin-left: -1.25rem; }
+.toc li.l2 { list-style: none; color: var(--muted); }
+.toc li.l2 a { color: var(--muted); }
+.toc a:hover { color: var(--accent); }
+
+/* Headings: white, with any **bold** phrase in cyan */
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); }
+main { counter-reset: part; }
+main h1 { counter-increment: part; font-size: 2.2rem; font-weight: 800; margin: 3.5rem 0 1.2rem; }
+main h1::before { content: "Part " counter(part); margin-bottom: .9rem; }
+h2 {
+  font-size: 1.55rem;
+  font-weight: 700;
+  margin: 3rem 0 1rem;
+  padding-bottom: .45rem;
+  border-bottom: 1px solid var(--rule);
+}
+h3 { font-size: 1.15rem; font-weight: 700; margin: 2rem 0 .6rem; }
+:is(h1, h2, h3) strong { color: var(--accent); font-weight: inherit; }
+
+/* Body */
+p, ul, ol { margin: 0 0 1rem; }
+li { margin: .25rem 0; }
+li::marker { color: var(--label); }
+a { color: var(--accent); text-decoration-color: rgba(56, 189, 248, 0.4); }
+strong { font-weight: 700; }
+em { color: var(--muted); }
+blockquote {
+  margin: 1.5rem 0;
+  padding: .8rem 1.2rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 12px;
+  color: var(--muted);
+}
+blockquote p:last-child { margin-bottom: 0; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+/* Code: mono, in panels; one ink colour with cyan keywords */
+code {
+  font: 0.86em/1.5 var(--mono);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  padding: .08em .35em;
+  border-radius: 5px;
+  color: #bae6fd;
+}
+pre, pre.hl { /* pre.hl outranks Pygments' own .hl background */
+  background: var(--code-bg);
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  overflow-x: auto;
+}
+pre code { background: none; border: 0; padding: 0; font-size: .82rem; color: var(--ink); }
+.hl * { color: inherit !important; font-style: normal !important; }
+.hl :is(.k, .kc, .kd, .kn, .kr, .nt) { color: var(--accent) !important; }
+.hl :is(.c, .c1, .cm, .ch, .cs) { color: var(--label) !important; }
+
+/* Tables: a panel with a mono header row */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 0 0 1.5rem;
+  font-size: .92rem;
+  display: block;
+  overflow-x: auto;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+}
+th, td {
+  padding: .5rem .7rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--rule);
+}
+tr:last-child td { border-bottom: 0; }
+th {
+  font: 600 .72rem/1.4 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--label);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+/* Task lists and footnotes */
+.contains-task-list { list-style: none; padding-left: 0; }
+.task-list-item-checkbox { display: inline-block; margin: 0 .5em 0 0; vertical-align: -.1em; accent-color: var(--accent); }
+hr.footnotes-sep { margin: 2rem 0 1rem; }
+.footnotes { font-size: .88em; color: var(--muted); }
+.footnote-ref a { text-decoration: none; }
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hl .hll { background-color: #ffffcc }
+.hl { background: #f8f8f8; }
+.hl .c { color: #3D7B7B; font-style: italic } /* Comment */
+.hl .err { border: 1px solid #F00 } /* Error */
+.hl .k { color: #008000; font-weight: bold } /* Keyword */
+.hl .o { color: #666 } /* Operator */
+.hl .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.hl .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.hl .cp { color: #9C6500 } /* Comment.Preproc */
+.hl .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.hl .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.hl .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.hl .gd { color: #A00000 } /* Generic.Deleted */
+.hl .ge { font-style: italic } /* Generic.Emph */
+.hl .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.hl .gr { color: #E40000 } /* Generic.Error */
+.hl .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.hl .gi { color: #008400 } /* Generic.Inserted */
+.hl .go { color: #717171 } /* Generic.Output */
+.hl .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.hl .gs { font-weight: bold } /* Generic.Strong */
+.hl .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.hl .gt { color: #04D } /* Generic.Traceback */
+.hl .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.hl .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.hl .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.hl .kp { color: #008000 } /* Keyword.Pseudo */
+.hl .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.hl .kt { color: #B00040 } /* Keyword.Type */
+.hl .m { color: #666 } /* Literal.Number */
+.hl .s { color: #BA2121 } /* Literal.String */
+.hl .na { color: #687822 } /* Name.Attribute */
+.hl .nb { color: #008000 } /* Name.Builtin */
+.hl .nc { color: #00F; font-weight: bold } /* Name.Class */
+.hl .no { color: #800 } /* Name.Constant */
+.hl .nd { color: #A2F } /* Name.Decorator */
+.hl .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.hl .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.hl .nf { color: #00F } /* Name.Function */
+.hl .nl { color: #767600 } /* Name.Label */
+.hl .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.hl .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.hl .nv { color: #19177C } /* Name.Variable */
+.hl .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.hl .w { color: #BBB } /* Text.Whitespace */
+.hl .mb { color: #666 } /* Literal.Number.Bin */
+.hl .mf { color: #666 } /* Literal.Number.Float */
+.hl .mh { color: #666 } /* Literal.Number.Hex */
+.hl .mi { color: #666 } /* Literal.Number.Integer */
+.hl .mo { color: #666 } /* Literal.Number.Oct */
+.hl .sa { color: #BA2121 } /* Literal.String.Affix */
+.hl .sb { color: #BA2121 } /* Literal.String.Backtick */
+.hl .sc { color: #BA2121 } /* Literal.String.Char */
+.hl .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.hl .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.hl .s2 { color: #BA2121 } /* Literal.String.Double */
+.hl .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.hl .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.hl .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.hl .sx { color: #008000 } /* Literal.String.Other */
+.hl .sr { color: #A45A77 } /* Literal.String.Regex */
+.hl .s1 { color: #BA2121 } /* Literal.String.Single */
+.hl .ss { color: #19177C } /* Literal.String.Symbol */
+.hl .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.hl .fm { color: #00F } /* Name.Function.Magic */
+.hl .vc { color: #19177C } /* Name.Variable.Class */
+.hl .vg { color: #19177C } /* Name.Variable.Global */
+.hl .vi { color: #19177C } /* Name.Variable.Instance */
+.hl .vm { color: #19177C } /* Name.Variable.Magic */
+.hl .il { color: #666 } /* Literal.Number.Integer.Long */</style>
+</head>
+<body class="html">
+<header class="cover">
+  <h1 class="doc-title">Using Cartograph</h1>
+  <p class="subtitle">Start it, map a repository, and read what the map tells you</p>
+  
+</header>
+
+<nav class="toc"><h2>Contents</h2><ol>
+<li class="l2"><a href="#1-start-it-on-your-computer">1. Start it on your computer</a></li>
+<li class="l2"><a href="#2-sign-in-and-pick-your-team">2. Sign in and pick your team</a></li>
+<li class="l2"><a href="#3-map-a-repository">3. Map a repository</a></li>
+<li class="l2"><a href="#4-read-the-screen">4. Read the screen</a></li>
+<li class="l2"><a href="#5-explain-ai">5. Explain (AI)</a></li>
+<li class="l2"><a href="#6-ask-ai-agent">6. Ask (AI agent)</a></li>
+<li class="l2"><a href="#7-limits-and-cost">7. Limits and cost</a></li>
+<li class="l2"><a href="#8-when-something-goes-wrong">8. When something goes wrong</a></li>
+</ol></nav>
+
+<main>
+
+<p>Cartograph turns a public TypeScript or JavaScript repository on GitHub into a
+map. Folders are boxes. Lines are imports. An import line exists only when
+the parser found a real import that points at a real file: nothing is
+guessed.</p>
+<h2 id="1-start-it-on-your-computer">1. Start it on your computer</h2>
+<p>You need two terminals, both in the project folder. Use Node 22: run
+<code>nvm use 22</code> first if your terminal defaults to an older version.</p>
+<p><strong>Terminal 1, the app:</strong></p>
+<pre class="hl"><code class="language-bash"><span class="nb">cd</span><span class="w"> </span>~/Projects/CartogrphAI/cartograph
+pnpm<span class="w"> </span>dev
+</code></pre>
+<p><strong>Terminal 2, the Ask agent</strong> (only needed for the Ask tab):</p>
+<pre class="hl"><code class="language-bash"><span class="nb">cd</span><span class="w"> </span>~/Projects/CartogrphAI/cartograph
+pnpm<span class="w"> </span>dev:agent
+</code></pre>
+<p>Open <strong><a href="http://localhost:3000">http://localhost:3000</a></strong>. To stop either one, click its terminal and
+press <strong>Ctrl+C</strong>.</p>
+<p>Once Cartograph is deployed, you skip this step and use its web address
+instead.</p>
+<h2 id="2-sign-in-and-pick-your-team">2. Sign in and pick your team</h2>
+<ol>
+<li>Click <strong>Sign in</strong> and continue with GitHub.</li>
+<li>The first time, you name your team (an &quot;organization&quot;). Everything you
+analyze belongs to that team, and only its members can see it.</li>
+<li>The team name shows top left. Click it to switch teams, create another
+one, or invite people.</li>
+</ol>
+<h2 id="3-map-a-repository">3. Map a repository</h2>
+<ol>
+<li>On the dashboard, paste a public GitHub URL, for example
+<code>https://github.com/expressjs/express</code>.</li>
+<li>Click <strong>Analyze</strong>. You see four steps: <strong>Fetch</strong> (download from GitHub),
+<strong>Select</strong> (keep code files), <strong>Parse</strong> (read every import), <strong>Store</strong>
+(save the map for your team).</li>
+<li>Most repositories finish in seconds. The map opens by itself.</li>
+</ol>
+<p>To map a branch or tag, paste its GitHub URL, such as
+<code>https://github.com/owner/repo/tree/v2</code>.</p>
+<p>If you analyze a repository your team already mapped, you get the saved map
+instantly. Click <strong>Re-analyze</strong> (top right of a map) to fetch the latest
+commit.</p>
+<h2 id="4-read-the-screen">4. Read the screen</h2>
+<p>The map page has three parts.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Left rail</td>
+<td>Framework detected, <strong>Roles</strong> (routes, pages, entry points), <strong>Insights</strong></td>
+</tr>
+<tr>
+<td>Middle</td>
+<td>The map: folders as boxes, files as rows, imports as lines</td>
+</tr>
+<tr>
+<td>Right panel</td>
+<td><strong>Overview</strong> of the repository, or the selected file; the <strong>Ask</strong> tab</td>
+</tr>
+</tbody>
+</table>
+<h3 id="move-around-the-map">Move around the map</h3>
+<ul>
+<li><strong>Scroll</strong> to zoom, <strong>drag</strong> the background to pan.</li>
+<li>The <strong>+ / − / frame</strong> buttons bottom left zoom in, out, and fit everything.</li>
+<li>Folder boxes start folded, showing a file count. Click a box's title to
+open it and see its files; click again to fold it.</li>
+</ul>
+<h3 id="select-a-file">Select a file</h3>
+<p>Click any file, in an open folder box or in any list in the panels. The map highlights its neighbours
+and dims everything else:</p>
+<ul>
+<li><strong>Green</strong> lines: files that <strong>import</strong> it.</li>
+<li><strong>Amber</strong> lines: files <strong>it</strong> imports.</li>
+</ul>
+<p>The right panel shows the file's details: kind, lines, what imports it, and
+what it imports. Press <strong>Escape</strong> or click empty background to clear the
+selection. Selecting never contacts the server, so it is instant.</p>
+<h3 id="blast-radius-and-dependency-chain">Blast radius and dependency chain</h3>
+<p>With a file selected, the right panel has two buttons:</p>
+<ul>
+<li><strong>Blast radius</strong>: every file that imports this one, directly or through
+others. This is what may break if you change it. Grouped into <strong>One
+step</strong>, <strong>Two steps</strong>, and <strong>Three or more steps</strong>.</li>
+<li><strong>Dependency chain</strong>: every file this one relies on, grouped the same way.</li>
+</ul>
+<h3 id="roles-and-insights-left-rail">Roles and Insights (left rail)</h3>
+<ul>
+<li><strong>Roles</strong> come from framework rules. Examples: Next.js pages, Nest
+controllers, Express servers, HTML script entries. A <strong>Routes</strong> list shows
+only routes whose method and full path are both written in the code.
+Click a role to filter the map to those files; <strong>Clear filter</strong> undoes it.</li>
+<li><strong>Insights</strong> lists facts the graph can show: <strong>Import cycles</strong>, <strong>Heavy
+fan-in</strong> (files many others import), <strong>Large files (500+ lines)</strong>, and
+<strong>Nothing imports these</strong>.</li>
+</ul>
+<p>&quot;Nothing imports these&quot; does not mean &quot;unused&quot;. Tests, scripts and config
+files are often run by tools, not imported. Cartograph never grades code
+quality: the graph cannot know.</p>
+<h3 id="the-numbers-in-the-overview">The numbers in the Overview</h3>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Files parsed</td>
+<td>Code files read</td>
+</tr>
+<tr>
+<td>Files skipped</td>
+<td>Code files too big to read (listed, never hidden)</td>
+</tr>
+<tr>
+<td>Imports resolved</td>
+<td>Import statements that point at a file in this repository. The map footer's &quot;connections&quot; count is lower: several imports between the same two files draw one line</td>
+</tr>
+<tr>
+<td>External packages</td>
+<td>Imports of npm packages (not drawn)</td>
+</tr>
+<tr>
+<td>Not resolved (with reason)</td>
+<td>Imports the parser could not match, each with its reason</td>
+</tr>
+<tr>
+<td>Lines</td>
+<td>Total lines of code</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-explain-ai">5. Explain (AI)</h2>
+<p>Select a file or folder and click <strong>Explain</strong>. Claude reads the file's code
+and its place on the map, and writes a short plain-English explanation.</p>
+<ul>
+<li>The first time takes a few seconds. After that the same explanation
+returns instantly, marked <strong>From cache (no model call)</strong>.</li>
+<li>Claude may only name files it was shown. If it names a path it was not
+shown, Cartograph strikes it through and labels it <strong>Not in the map</strong>.</li>
+<li><strong>Explain again</strong> asks for a fresh one.</li>
+</ul>
+<h2 id="6-ask-ai-agent">6. Ask (AI agent)</h2>
+<p>Open the <strong>Ask</strong> tab in the right panel and type a question about this
+repository. Good questions:</p>
+<ul>
+<li><em>Where is authentication handled?</em></li>
+<li><em>What are the entry points?</em></li>
+<li><em>What breaks if I change the most depended-on file?</em></li>
+</ul>
+<p>You see each step the agent takes (looking up files, reading source,
+tracing blast radius), then its answer. It can only read this one map and
+this repository's code. It declines to judge whether code is &quot;good&quot;.</p>
+<h2 id="7-limits-and-cost">7. Limits and cost</h2>
+<p>Each team gets, per day: <strong>30</strong> analyses, <strong>200</strong> explanations and <strong>100</strong>
+questions. Explain and Ask use your Anthropic credit, a few cents each.
+Analyzing uses no AI and costs nothing.</p>
+<p>You can watch every AI call, with its cost and timing, in LangSmith under the
+<strong>cartograph</strong> project.</p>
+<h2 id="8-when-something-goes-wrong">8. When something goes wrong</h2>
+<table>
+<thead>
+<tr>
+<th>You see</th>
+<th>Do this</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;Repository not found, or it is not public&quot;</td>
+<td>Check the URL; private repos are not supported</td>
+</tr>
+<tr>
+<td>&quot;GitHub rate limit reached&quot;</td>
+<td>Wait an hour, or add a GitHub token with <code>pnpm env:setup --only github</code></td>
+</tr>
+<tr>
+<td>&quot;Ask is not configured&quot;</td>
+<td>Start terminal 2 (<code>pnpm dev:agent</code>)</td>
+</tr>
+<tr>
+<td>&quot;Your team reached today's limit&quot;</td>
+<td>Try again tomorrow</td>
+</tr>
+<tr>
+<td>&quot;Stored by an older parser&quot;</td>
+<td>Click <strong>Re-analyze</strong></td>
+</tr>
+<tr>
+<td>Page won't load at localhost:3000</td>
+<td>Check terminal 1 is running; restart with <code>pnpm dev</code></td>
+</tr>
+<tr>
+<td>Anything else</td>
+<td>Run <code>pnpm env:check</code> to test every key</td>
+</tr>
+</tbody>
+</table>
+
+</main>
+</body>
+</html>

@@ -34,7 +34,12 @@ export function isDeclarationFile(rel: string): boolean {
  * Walk a directory without following symlinks (untrusted input: a symlink
  * could point anywhere on the host). Symlinks are not code files we can read.
  */
-export async function walk(root: string, maxFiles = 50_000): Promise<WalkResult> {
+export async function walk(
+  root: string,
+  maxFiles = 50_000,
+  /** real sizes for files that were written as placeholders */
+  sizeOverrides?: Map<string, number>,
+): Promise<WalkResult> {
   const code: WalkedFile[] = [];
   const allFiles = new Set<string>();
   const stack: string[] = [root];
@@ -62,7 +67,7 @@ export async function walk(root: string, maxFiles = 50_000): Promise<WalkResult>
       }
       if (isCodeFile(rel)) {
         const st = await fs.lstat(abs);
-        code.push({ rel, abs, bytes: st.size });
+        code.push({ rel, abs, bytes: sizeOverrides?.get(rel) ?? st.size });
       }
     }
   }

@@ -1,4 +1,4 @@
-import { ts } from "ts-morph";
+import ts from "typescript";
 import type { ImportKind } from "./types";
 
 export interface RawImport {
