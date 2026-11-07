@@ -154,7 +154,7 @@ You can watch every AI call, with its cost and timing, in LangSmith under the
 |---|---|
 | "Repository not found, or it is not public" | Check the URL; private repos are not supported |
 | "GitHub rate limit reached" | Wait an hour, or add a GitHub token with `pnpm env:setup --only github` |
-| "Ask is not configured" | Start terminal 2 (`pnpm dev:agent`) |
+| "Ask is not configured" | Run `pnpm agent key` and import the key in Supabase (see `docs/SETUP.md`, step 7) |
 | "Your team reached today's limit" | Try again tomorrow |
 | "Stored by an older parser" | Click **Re-analyze** |
 | Page won't load at localhost:3000 | Check terminal 1 is running; restart with `pnpm dev` |
