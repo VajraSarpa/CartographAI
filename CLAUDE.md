@@ -1,4 +1,8 @@
-# Cartograph
+# CartographAI
+
+Product name: **CartographAI**, tagline "Every connection, proven." Code
+identifiers, package names and env vars keep `cartograph` (e.g.
+`cartograph-agent`, `cartograph-lang-*`, `CARTOGRAPH_LANGUAGES`).
 
 Sign in with GitHub, paste a public TypeScript, JavaScript or Python repo URL, get a map:
 folders are boxes, imports are lines. Select a file to see what imports it and

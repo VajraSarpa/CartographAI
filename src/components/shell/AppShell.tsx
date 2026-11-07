@@ -8,7 +8,7 @@ export function AppShell({ children, full = false }: { children: ReactNode; full
     <div className="flex h-screen flex-col">
       <header className="flex h-12 shrink-0 items-center gap-4 border-b border-border bg-panel px-4">
         <Link href="/dashboard" className="font-semibold tracking-tight">
-          Cartograph
+          CartographAI
         </Link>
         <OrganizationSwitcher
           hidePersonal

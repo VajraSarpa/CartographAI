@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: { absolute: "Cartograph: a map of any TypeScript, JavaScript or Python repo" },
+  title: { absolute: "CartographAI: every connection, proven" },
 };
 
 const FRAMEWORKS = [
@@ -54,7 +54,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-        <span className="font-semibold tracking-tight">Cartograph</span>
+        <span className="font-semibold tracking-tight">CartographAI</span>
         <nav className="flex items-center gap-4 text-sm">
           <Link href="/sign-in" className="text-muted hover:text-fg">
             Sign in
@@ -68,6 +68,7 @@ export default function Home() {
       <main className="mx-auto max-w-5xl space-y-24 px-6 pb-24">
         <section className="grid items-center gap-10 pt-10 md:grid-cols-[1fr_auto]">
           <div className="space-y-6">
+            <p className="text-sm font-semibold uppercase tracking-wider text-accent">Every connection, proven.</p>
             <h1 className="text-4xl font-semibold leading-tight tracking-tight md:text-5xl">A map of any TypeScript, JavaScript or Python repo.</h1>
             <p className="max-w-[46ch] text-lg text-muted">
               Paste a public GitHub URL. Folders become boxes, imports become lines. Select a file to see what imports it and what breaks two steps out.

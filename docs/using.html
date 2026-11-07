@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="keywords" content="rupa-theme:cyan">
-<title>Using Cartograph</title>
+<title>Using CartographAI</title>
 <style>/* Rupa cyan theme: Vajra's Cyan Signature deck look for documents.
    Deep navy, one cyan accent, Hanken Grotesk with JetBrains Mono labels.
    Screen CSS for both `cyan` and `cyan-dark`; their PDFs differ only in
@@ -278,7 +278,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </head>
 <body class="html">
 <header class="cover">
-  <h1 class="doc-title">Using Cartograph</h1>
+  <h1 class="doc-title">Using CartographAI</h1>
   <p class="subtitle">Start it, map a repository, and read what the map tells you</p>
   
 </header>
@@ -296,7 +296,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <main>
 
-<p>Cartograph turns a public TypeScript, JavaScript or Python repository on GitHub into a
+<p>CartographAI turns a public TypeScript, JavaScript or Python repository on GitHub into a
 map. Folders are boxes. Lines are imports. An import line exists only when
 the parser found a real import that points at a real file: nothing is
 guessed.</p>
@@ -313,7 +313,7 @@ pnpm<span class="w"> </span>dev:agent
 </code></pre>
 <p>Open <strong><a href="http://localhost:3000">http://localhost:3000</a></strong>. To stop either one, click its terminal and
 press <strong>Ctrl+C</strong>.</p>
-<p>Once Cartograph is deployed, you skip this step and use its web address
+<p>Once CartographAI is deployed, you skip this step and use its web address
 instead.</p>
 <h2 id="2-sign-in-and-pick-your-team">2. Sign in and pick your team</h2>
 <ol>
@@ -400,7 +400,7 @@ fan-in</strong> (files many others import), <strong>Large files (500+ lines)</st
 <strong>Nothing imports these</strong>.</li>
 </ul>
 <p>&quot;Nothing imports these&quot; does not mean &quot;unused&quot;. Tests, scripts and config
-files are often run by tools, not imported. Cartograph never grades code
+files are often run by tools, not imported. CartographAI never grades code
 quality: the graph cannot know.</p>
 <h3 id="the-numbers-in-the-overview">The numbers in the Overview</h3>
 <table>
@@ -444,7 +444,7 @@ and its place on the map, and writes a short plain-English explanation.</p>
 <li>The first time takes a few seconds. After that the same explanation
 returns instantly, marked <strong>From cache (no model call)</strong>.</li>
 <li>Claude may only name files it was shown. If it names a path it was not
-shown, Cartograph strikes it through and labels it <strong>Not in the map</strong>.</li>
+shown, CartographAI strikes it through and labels it <strong>Not in the map</strong>.</li>
 <li><strong>Explain again</strong> asks for a fresh one.</li>
 </ul>
 <h2 id="6-ask-ai-agent">6. Ask (AI agent)</h2>

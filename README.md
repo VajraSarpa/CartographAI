@@ -1,10 +1,12 @@
-# Cartograph
+# CartographAI
+
+**Every connection, proven.**
 
 Paste a public TypeScript, JavaScript or Python GitHub repository and get a map: folders
 are boxes, imports are lines. Select a file to see what imports it and what
 breaks two steps out. Ask for an explanation, or ask the repo a question.
 
-![How Cartograph works: a repository is fetched, every import is parsed and resolved, folders become boxes and imports become lines, a selected file shows what imports it and what it imports, and Ask answers from the graph](docs/cartograph.svg)
+![How CartographAI works: a repository is fetched, every import is parsed and resolved, folders become boxes and imports become lines, a selected file shows what imports it and what it imports, and Ask answers from the graph](docs/cartograph.svg)
 
 Every connection on the map comes from parsing real code: the TypeScript
 compiler for TS/JS, tree-sitter plus Python's import rules for Python. The AI only explains what the parser proved, and every explanation
@@ -44,7 +46,7 @@ Each language is a plug-in. TypeScript/JavaScript and Python are built in. The g
 map, Explain and Ask don't know which language a file is in.
 
 If you use the hosted app, there is nothing to install. This section is for
-people hosting Cartograph themselves.
+people hosting CartographAI themselves.
 
 Turn languages on with one variable. Order matters: when two languages claim
 the same file, the first one in the list gets it.

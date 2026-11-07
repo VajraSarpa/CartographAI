@@ -1,4 +1,4 @@
-# Deploying Cartograph
+# Deploying CartographAI
 
 One service: the Next.js app on **Vercel**. The Ask agent runs inside it.
 Supabase, Clerk and LangSmith (tracing) are managed. Hosting the agent
