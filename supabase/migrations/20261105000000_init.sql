@@ -177,6 +177,11 @@ alter table public.usage_events enable row level security;
 revoke all on all tables in schema public from anon, authenticated;
 grant select on public.organizations, public.repositories, public.analyses, public.analysis_runs,
   public.analysis_maps, public.explanations, public.file_roles to authenticated;
+-- The app server (secret key) writes. Granted explicitly so the schema works
+-- with Supabase's "automatically expose new tables" turned off.
+grant select, insert, update, delete on all tables in schema public to service_role;
+grant usage, select on all sequences in schema public to service_role;
+grant execute on all functions in schema public to service_role;
 
 create policy "members read their organization" on public.organizations
   for select to authenticated using (id = (select public.requesting_org_id()));

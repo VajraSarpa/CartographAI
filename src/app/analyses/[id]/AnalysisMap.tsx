@@ -1,9 +1,16 @@
 "use client";
 
+import { AskPanel } from "@/components/map/AskPanel";
+import { ExplainPanel } from "@/components/map/ExplainPanel";
 import { MapExplorer } from "@/components/map/MapExplorer";
 import type { MapData } from "@/components/map/model";
 
-/** Client wrapper: later phases plug Explain and Ask into the map here. */
-export function AnalysisMap({ data }: { analysisId: string; data: MapData }) {
-  return <MapExplorer data={data} />;
+export function AnalysisMap({ analysisId, data }: { analysisId: string; data: MapData }) {
+  return (
+    <MapExplorer
+      data={data}
+      explain={(target) => <ExplainPanel analysisId={analysisId} target={target} />}
+      ask={<AskPanel analysisId={analysisId} />}
+    />
+  );
 }

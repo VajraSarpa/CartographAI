@@ -105,7 +105,7 @@ export function MapExplorer({ data, explain, ask }: { data: MapData; explain?: E
   return (
     <MapCtx.Provider value={state}>
       <ReactFlowProvider>
-        <div className="grid h-full min-h-0 grid-cols-[240px_1fr_360px]">
+        <div className="grid h-full min-h-0 grid-cols-[240px_1fr_360px] grid-rows-[minmax(0,1fr)]">
           <Rail />
           <main className="relative min-h-0" aria-label="Map">
             {lens && (
