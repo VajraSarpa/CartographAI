@@ -287,7 +287,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li class="l2"><a href="#1-clerk">1. Clerk</a></li>
 <li class="l2"><a href="#2-supabase">2. Supabase</a></li>
 <li class="l2"><a href="#3-anthropic">3. Anthropic</a></li>
-<li class="l2"><a href="#4-langsmith">4. LangSmith</a></li>
+<li class="l2"><a href="#4-langsmith-optional">4. LangSmith (optional)</a></li>
 <li class="l2"><a href="#5-github-token-optional-recommended">5. GitHub token (optional, recommended)</a></li>
 <li class="l2"><a href="#6-enter-everything">6. Enter everything</a></li>
 <li class="l2"><a href="#7-what-happens-next">7. What happens next</a></li>
@@ -394,8 +394,9 @@ testing.</li>
 (<code>sk-ant-…</code>) is shown once, so leave the page open until you have entered
 it.</li>
 </ol>
-<h2 id="4-langsmith">4. LangSmith</h2>
+<h2 id="4-langsmith-optional">4. LangSmith (optional)</h2>
 <p>Site: <a href="http://smith.langchain.com">smith.langchain.com</a> (US region)</p>
+<p>Only needed for tracing and evals. Skip it and the app runs the same.</p>
 <p>Settings → <strong>API Keys</strong> → <strong>Create API Key</strong> → <strong>Personal Access Token</strong>.
 Copy the key (<code>lsv2_…</code>). It is shown once.</p>
 <h2 id="5-github-token-optional-recommended">5. GitHub token (optional, recommended)</h2>
@@ -410,7 +411,7 @@ Copy the key (<code>lsv2_…</code>). It is shown once.</p>
 quickly hit GitHub's limit of 60 anonymous requests an hour.</p>
 <h2 id="6-enter-everything">6. Enter everything</h2>
 <p>In a terminal (the VS Code terminal works):</p>
-<pre class="hl"><code class="language-bash"><span class="nb">cd</span><span class="w"> </span>~/Projects/CartogrphAI/cartograph
+<pre class="hl"><code class="language-bash"><span class="nb">cd</span><span class="w"> </span>path/to/cartograph
 pnpm<span class="w"> </span>env:setup
 </code></pre>
 <p>It asks for each value in order. What you type for a secret stays hidden.
@@ -423,12 +424,17 @@ and <code>cartograph-agent/.env</code>, readable only by you and ignored by git.
 <p>Vercel needs nothing yet. Once the keys are in:</p>
 <ol>
 <li><code>pnpm env:check</code> confirms every key with its service.</li>
-<li><code>pnpm agent key</code> generates the agent's signing key. You import it once in
-Supabase (Project Settings → JWT Keys → <strong>Create standby key</strong> → import
-the private key), then the file is deleted.</li>
-<li>End-to-end test: sign in, analyze a repo, map, Explain, Ask.</li>
-<li>Deploy the app to Vercel and the agent to LangSmith.</li>
+<li><code>pnpm agent key</code> generates the signing key the Ask tab needs. You import
+it once in Supabase (Project Settings → JWT Keys → <strong>Create standby key</strong>
+→ import the private key), then delete the file. <code>pnpm agent check</code>
+confirms it worked (after you have analyzed one repository).</li>
+<li><code>pnpm dev</code>, then the end-to-end test: sign in, analyze a repo, map,
+Explain, Ask.</li>
+<li>Optional: deploy to Vercel (see <code>docs/DEPLOY.md</code>). Ask runs inside the
+app, so there is nothing else to deploy.</li>
 </ol>
+<p>With Claude Code you can let the installer walk you through all of this:
+see &quot;Install with Claude Code&quot; in the README.</p>
 
 </main>
 </body>
