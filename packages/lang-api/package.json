@@ -1,6 +1,7 @@
 {
   "name": "cartograph-lang-api",
   "version": "1.0.0",
+  "license": "MIT",
   "description": "Types for Cartograph language plug-ins. Types only: nothing here runs.",
   "type": "module",
   "types": "./index.d.ts",

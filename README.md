@@ -164,3 +164,7 @@ The core loads packages with Node's own `import()`, so publish JavaScript
 
 See [docs/DEPLOY.md](docs/DEPLOY.md) for deployment and [docs/SECURITY.md](docs/SECURITY.md)
 for the security model.
+
+## License
+
+[MIT](LICENSE) © 2026 Vajra Sarpa.

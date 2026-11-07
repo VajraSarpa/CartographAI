@@ -1,6 +1,7 @@
 {
   "name": "cartograph-lang-template",
   "version": "0.0.0",
+  "license": "MIT",
   "private": true,
   "description": "Starting point for a Cartograph language plug-in. Copy this folder, rename it cartograph-lang-<your-language>.",
   "type": "module",
