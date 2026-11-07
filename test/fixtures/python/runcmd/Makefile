@@ -1,0 +1,2 @@
+jobs:
+	python -m job

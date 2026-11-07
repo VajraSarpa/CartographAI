@@ -70,6 +70,12 @@ through the folders the repo itself puts on the import path:
   exists, otherwise the project folder.
 - **Several projects in one repo** can import each other only when one lists
   the other as a dependency, or both are in the same uv workspace.
+- **Run commands** count as evidence too. A Procfile, Dockerfile, compose
+  file, Makefile, `app.yaml` or shell script that runs `gunicorn app.main:app`,
+  `uvicorn ...`, `python -m pkg`, `flask --app web` or `python path/script.py`
+  puts that module's folder (or the script's folder) on the path. This only
+  counts when exactly one folder in the repo matches. A folder without an
+  `__init__.py` never shadows a declared dependency with the same name.
 - **Test files** use pytest's rules: the first folder above a test file
   without an `__init__.py` is on the path, plus `pythonpath`. This is off
   under `--import-mode=importlib`.

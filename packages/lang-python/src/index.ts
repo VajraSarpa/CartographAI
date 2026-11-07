@@ -4,9 +4,10 @@ import path from "node:path";
 import type { FinishResult, FrameworkInfo, LanguagePlugin, LanguageSession, RawImport, RepoView } from "cartograph-lang-api";
 import { Language, Parser } from "web-tree-sitter";
 import { extract, type FileFacts } from "./extract";
-import { applyFrameworks } from "./frameworks";
+import { applyFrameworks, depSources } from "./frameworks";
 import { findProjects, type Project } from "./project";
 import { isTestFile, PythonResolver } from "./resolve";
+import { RUN_FILES, runRoots } from "./runroots";
 
 const ROLES: Record<string, string> = {
   "package-entry": "Package entry points",
@@ -51,7 +52,7 @@ export const pythonPlugin: LanguagePlugin = {
   id: "python",
   name: "Python",
   claims: (rel) => rel.endsWith(".py") || rel.endsWith(".pyi"),
-  needsFile: (rel) => CONFIG.test(rel),
+  needsFile: (rel) => CONFIG.test(rel) || RUN_FILES.test(rel),
   init,
   open: (repo) => new PythonSession(repo),
 };
@@ -66,7 +67,8 @@ class PythonSession implements LanguageSession {
   constructor(private readonly repo: RepoView) {
     if (!parser) throw new Error("Python plug-in used before init()");
     this.projects = findProjects(repo).projects;
-    this.resolver = new PythonResolver(repo, this.projects, pytestInUse(repo, this.projects));
+    const deps = new Set(depSources(repo, this.projects).flatMap((d) => [...d.deps]));
+    this.resolver = new PythonResolver(repo, this.projects, pytestInUse(repo, this.projects), runRoots(repo), deps);
   }
 
   skipReason(rel: string): string | null {

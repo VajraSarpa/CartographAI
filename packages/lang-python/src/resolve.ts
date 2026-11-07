@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { RepoView, Resolution } from "cartograph-lang-api";
-import { matchesMember, type Project, type Root } from "./project";
+import { matchesMember, normaliseName, type Project, type Root } from "./project";
 import { STDLIB } from "./stdlib";
 
 /** What a dotted name points at, within some import path. */
@@ -32,6 +32,10 @@ export class PythonResolver {
     private readonly repo: RepoView,
     private readonly projects: Project[],
     private readonly pytestInUse: boolean,
+    /** folders a run command in the repo puts on the path, for every file */
+    private readonly appRoots: Root[] = [],
+    /** every declared dependency name, normalised */
+    private readonly declaredDeps: ReadonlySet<string> = new Set(),
   ) {
     for (const f of repo.files) {
       let d = path.posix.dirname(f);
@@ -73,6 +77,7 @@ export class PythonResolver {
       for (const p of cfg?.pythonpath ?? []) add({ dir: p, source: `${cfg!.file} pytest pythonpath` });
     }
     if (own) for (const r of own.roots) add(r);
+    for (const r of this.appRoots) add(r);
     for (const other of this.projects) {
       if (other === own || other.roots.length === 0) continue;
       const why = own ? this.link(own, other) : null;
@@ -127,6 +132,9 @@ export class PythonResolver {
     const roots = this.rootsFor(fromRel);
     const found = this.find(mod, roots);
     if (!found && STDLIB.has(top)) return { status: "external", pkg: top };
+    // A folder without __init__.py loses to an installed regular package of the
+    // same name; when the repo declares that package as a dependency, it is external.
+    if (found && this.topIsNamespaceOnly(top, roots) && this.declaredDeps.has(normaliseName(top))) return { status: "external", pkg: top };
     return this.finish(found, name, mod, () => this.notFound(fromRel, mod, roots));
   }
 
@@ -157,6 +165,11 @@ export class PythonResolver {
       nsHit ??= f;
     }
     return nsHit;
+  }
+
+  private topIsNamespaceOnly(top: string, roots: Root[]): boolean {
+    const hits = roots.map((r) => this.at(path.posix.join(r.dir, top), r)).filter(Boolean);
+    return hits.length > 0 && hits.every((h) => h!.kind === "namespace");
   }
 
   /** What lives at a path (no extension): package, module, stub or namespace folder. */
@@ -230,7 +243,7 @@ export class PythonResolver {
       const where = elsewhere.f!.kind === "namespace" ? (elsewhere.f as { dir: string }).dir : (elsewhere.f as { file: string }).file;
       const folder = elsewhere.d === "." ? "the repo root" : `${elsewhere.d}/`;
       const how = elsewhere.d === here ? "e.g. when this file is run as a script" : "e.g. when run from the repo root";
-      const known = roots.length ? `the import path the repo declares for this file is ${roots.map((r) => (r.dir === "." ? "the repo root" : r.dir + "/")).join(", ")}` : "the repo declares no import path for this file (no pyproject.toml or setup.cfg package settings cover it)";
+      const known = roots.length ? `the import path the repo declares for this file is ${roots.map((r) => (r.dir === "." ? "the repo root" : r.dir + "/")).join(", ")}` : "the repo declares no import path for this file (no pyproject.toml or setup.cfg package settings cover it, and no run command such as a Procfile or Dockerfile CMD names a module)";
       return { status: "failed", reason: `matches ${where} only if ${folder} is on sys.path (${how}); ${known}` };
     }
     return { status: "external", pkg: top };

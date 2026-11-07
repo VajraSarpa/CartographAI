@@ -82,7 +82,7 @@ interface DepSource {
 }
 
 /** Dependency lists: every project, plus requirements*.txt files. */
-function depSources(repo: RepoView, projects: Project[]): DepSource[] {
+export function depSources(repo: RepoView, projects: Project[]): DepSource[] {
   const out: DepSource[] = projects.map((p) => ({ dir: p.dir, file: p.file, deps: p.deps }));
   for (const f of repo.files) {
     if (!/(^|\/)requirements[^/]*\.txt$/.test(f)) continue;

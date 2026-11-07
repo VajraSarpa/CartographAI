@@ -215,3 +215,28 @@ describe("python frameworks: Django", async () => {
     expect(r.files.find((f) => f.path === "blog/views.py")?.entry).toBe(false);
   });
 });
+
+describe("python: run commands as evidence of the import path", async () => {
+  const r = await parse(fx("runcmd"));
+
+  it("a Procfile server target and a Dockerfile script each put exactly one folder on the path", () => {
+    expect(edges(r)).toEqual(["svc/main.py -> svc/api.py", "tools/seed.py -> tools/helpers.py"]);
+    expect(r.framework.routes.map((x) => `${x.method} ${x.path}`)).toEqual(["GET /v1/ping"]);
+  });
+
+  it("a folder without __init__.py does not shadow a declared dependency of the same name", async () => {
+    const dir = repo({
+      "pyproject.toml": '[project]\nname = "w"\ndependencies = ["alembic"]\n',
+      "w/__init__.py": "",
+      "w/alembic/env.py": "from alembic import context\n",
+      "Procfile": "release: python w/seed.py\n",
+      "w/seed.py": "",
+    });
+    const m = await parse(dir);
+    expect(rec(m, "from alembic import context")).toMatchObject({ status: "external", pkg: "alembic" });
+  });
+
+  it("a module path that matches more than one folder proves nothing", () => {
+    expect(rec(r, "shared")).toMatchObject({ status: "external" });
+  });
+});

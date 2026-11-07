@@ -107,6 +107,9 @@ Original brief:
   template shows no routes because its include prefix is
   `settings.API_V1_STR`. With that prefix written as a plain string, all 23
   endpoints come out exact.
+- Run commands as import-path evidence (owner's choice, 2026-11-07): see
+  `packages/lang-python/src/runroots.ts`. This is for apps that ship only a
+  requirements.txt.
 - `PARSER_VERSION` is 6.
 
 ## Known follow-ups (small, not urgent)
