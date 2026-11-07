@@ -64,11 +64,19 @@ async function Analyses() {
   );
 }
 
-export default function DashboardPage() {
+async function Form({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const sp = await searchParams;
+  const url = typeof sp.url === "string" ? sp.url.slice(0, 300) : "";
+  return <AnalyzeForm autoFocus initialUrl={url} />;
+}
+
+export default function DashboardPage(props: PageProps<"/dashboard">) {
   return (
     <AppShell>
       <main className="mx-auto max-w-3xl space-y-8 px-6 py-10">
-        <AnalyzeForm autoFocus />
+        <Suspense fallback={<AnalyzeForm />}>
+          <Form searchParams={props.searchParams} />
+        </Suspense>
         <Suspense fallback={<p className="text-sm text-muted">Loading analyses…</p>}>
           <Analyses />
         </Suspense>

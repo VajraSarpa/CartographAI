@@ -26,10 +26,12 @@ async function key() {
     return;
   }
   const { privateKey, publicKey } = await generateKeyPair("ES256", { extractable: true });
-  const kid = `cartograph-agent-${new Date().toISOString().slice(0, 10)}-${randomUUID().slice(0, 8)}`;
+  // Supabase requires the key id of an imported key to be a UUID
+  const kid = randomUUID();
   const pem = await exportPKCS8(privateKey);
-  setEnv(".env.local", { AGENT_SIGNING_KEY: pem.replace(/\n/g, "\\n"), AGENT_SIGNING_KID: kid });
-  const jwk = { ...(await exportJWK(privateKey)), kid, alg: "ES256", use: "sig", key_ops: ["sign", "verify"] };
+  // JSON.stringify in setEnv escapes the newlines once: KEY="-----BEGIN...\n..."
+  setEnv(".env.local", { AGENT_SIGNING_KEY: pem, AGENT_SIGNING_KID: kid });
+  const jwk = { ...(await exportJWK(privateKey)), kid, alg: "ES256" };
   writeFileSync(".agent-signing-key.jwk.json", JSON.stringify(jwk, null, 2) + "\n", { mode: 0o600 });
   console.log(`Wrote AGENT_SIGNING_KEY and AGENT_SIGNING_KID (${kid}) to .env.local.`);
   console.log("Wrote the private JWK to .agent-signing-key.jwk.json (git-ignored).");

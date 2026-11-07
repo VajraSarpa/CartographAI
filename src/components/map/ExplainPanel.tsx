@@ -1,54 +1,10 @@
 "use client";
 
-import { Fragment, useState, type ReactNode } from "react";
-import { findPathMentions } from "@/lib/paths";
-import { useMap } from "./context";
-import { PathLink } from "./PathLink";
+import { useState } from "react";
+import { RichText } from "./RichText";
 
 type Target = { kind: "file"; path: string } | { kind: "module"; module: string };
 type Result = { content: string; cached: boolean; inventedPaths: string[]; model: string };
-
-/** Renders text with known paths as links and unknown paths flagged. No HTML injection: plain React nodes only. */
-function RichText({ text, invented }: { text: string; invented: Set<string> }) {
-  const { index } = useMap();
-  const renderInline = (s: string, key: string): ReactNode[] => {
-    const out: ReactNode[] = [];
-    const parts = s.split(/(`[^`\n]+`|\*\*[^*\n]+\*\*)/g);
-    parts.forEach((p, i) => {
-      const k = `${key}-${i}`;
-      if (p.startsWith("`") && p.endsWith("`")) {
-        const inner = p.slice(1, -1).replace(/:\d+(?::\d+)?$/, "");
-        if (index.files.has(inner)) out.push(<PathLink key={k} path={inner} />);
-        else if (invented.has(inner) || findPathMentions(p).some((m) => invented.has(m)))
-          out.push(
-            <span key={k} className="font-mono text-warn line-through" title="Not in the map: the model named a path it was not shown">
-              {inner}
-            </span>,
-          );
-        else out.push(<code key={k} className="rounded bg-panel-2 px-1 font-mono text-[0.9em]">{inner}</code>);
-      } else if (p.startsWith("**") && p.endsWith("**")) out.push(<strong key={k}>{p.slice(2, -2)}</strong>);
-      else if (p) out.push(<Fragment key={k}>{p}</Fragment>);
-    });
-    return out;
-  };
-  const blocks = text.split(/\n{2,}/);
-  return (
-    <div className="space-y-2 text-sm leading-relaxed">
-      {blocks.map((b, i) => {
-        const lines = b.split("\n");
-        if (lines.every((l) => /^\s*[-*]\s+/.test(l)))
-          return (
-            <ul key={i} className="list-disc space-y-1 pl-5">
-              {lines.map((l, j) => (
-                <li key={j}>{renderInline(l.replace(/^\s*[-*]\s+/, ""), `${i}-${j}`)}</li>
-              ))}
-            </ul>
-          );
-        return <p key={i}>{renderInline(b, String(i))}</p>;
-      })}
-    </div>
-  );
-}
 
 export function ExplainPanel({ analysisId, target }: { analysisId: string; target: Target }) {
   const key = target.kind === "file" ? `f:${target.path}` : `m:${target.module}`;

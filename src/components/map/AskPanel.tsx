@@ -1,38 +1,12 @@
 "use client";
 
-import { Fragment, useRef, useState } from "react";
-import { useMap } from "./context";
-import { PathLink } from "./PathLink";
+import { useRef, useState } from "react";
+import { RichText } from "./RichText";
 
 type ToolEvent = { id?: string; name: string; args: unknown; done?: boolean; ok?: boolean };
 type Turn = { role: "user" | "assistant"; content: string; tools?: ToolEvent[]; error?: string };
 
 const SUGGESTIONS = ["Where is authentication handled?", "What are the entry points?", "What breaks if I change the most depended-on file?"];
-
-function Answer({ text }: { text: string }) {
-  const { index } = useMap();
-  return (
-    <div className="space-y-2 text-sm leading-relaxed">
-      {text.split(/\n{2,}/).map((para, i) => (
-        <p key={i} className="whitespace-pre-wrap">
-          {para.split(/(`[^`\n]+`)/g).map((part, j) => {
-            if (part.startsWith("`") && part.endsWith("`")) {
-              const inner = part.slice(1, -1);
-              return index.files.has(inner) ? (
-                <PathLink key={j} path={inner} />
-              ) : (
-                <code key={j} className="rounded bg-panel-2 px-1 font-mono text-[0.9em]">
-                  {inner}
-                </code>
-              );
-            }
-            return <Fragment key={j}>{part.replace(/\*\*(.+?)\*\*/g, "$1")}</Fragment>;
-          })}
-        </p>
-      ))}
-    </div>
-  );
-}
 
 export function AskPanel({ analysisId }: { analysisId: string }) {
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -109,12 +83,12 @@ export function AskPanel({ analysisId }: { analysisId: string }) {
                 <ul className="space-y-0.5 font-mono text-[11px] text-muted">
                   {t.tools!.map((x, j) => (
                     <li key={j} className="truncate" title={JSON.stringify(x.args)}>
-                      {x.done ? (x.ok ? "✓" : "✗") : "…"} {x.name}({Object.values((x.args as Record<string, unknown>) ?? {}).map(String).join(", ")})
+                      {x.done ? (x.ok ? "✓" : "✗") : "…"} {x.name}({Object.values((x.args as Record<string, unknown>) ?? {}).filter((v) => v !== "" && v != null).map(String).join(", ")})
                     </li>
                   ))}
                 </ul>
               )}
-              {t.content ? <Answer text={t.content} /> : !t.error && <p className="text-xs text-muted">Thinking…</p>}
+              {t.content ? <RichText text={t.content} /> : !t.error && <p className="text-xs text-muted">Thinking…</p>}
               {t.error && (
                 <p role="alert" className="text-xs text-warn">
                   {t.error}

@@ -77,6 +77,16 @@ export async function POST(req: Request, ctx: RouteContext<"/api/analyses/[id]/a
       const reader = upstream.body!.pipeThrough(new TextDecoderStream()).getReader();
       let buf = "";
       let answer = "";
+      // createAgent's middleware nodes can re-emit earlier messages in their
+      // "updates" chunks, so forward each tool call and result once, by id.
+      const seenCalls = new Set<string>();
+      const seenResults = new Set<string>();
+      const firstTime = (seen: Set<string>, id: string | undefined) => {
+        if (!id) return true;
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      };
       try {
         for (;;) {
           const { value, done } = await reader.read();
@@ -107,10 +117,10 @@ export async function POST(req: Request, ctx: RouteContext<"/api/analyses/[id]/a
             for (const node of Object.values(update)) {
               for (const m of node?.messages ?? []) {
                 if (m.type === "ai") {
-                  for (const tc of m.tool_calls ?? []) send({ type: "tool_call", id: tc.id, name: tc.name, args: tc.args });
+                  for (const tc of m.tool_calls ?? []) if (firstTime(seenCalls, tc.id)) send({ type: "tool_call", id: tc.id, name: tc.name, args: tc.args });
                   const t = textOf(m.content);
                   if (!m.tool_calls?.length && t) answer = t;
-                } else if (m.type === "tool") {
+                } else if (m.type === "tool" && firstTime(seenResults, m.tool_call_id)) {
                   const t = textOf(m.content);
                   send({ type: "tool_result", id: m.tool_call_id, name: m.name, ok: !t.startsWith("Tool error"), size: t.length });
                 }

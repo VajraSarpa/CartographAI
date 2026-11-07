@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { analyze, type AnalyzeState } from "./actions";
 
-export function AnalyzeForm({ autoFocus = false }: { autoFocus?: boolean }) {
+export function AnalyzeForm({ autoFocus = false, initialUrl = "" }: { autoFocus?: boolean; initialUrl?: string }) {
   const [state, action, pending] = useActionState<AnalyzeState, FormData>(analyze, { error: null });
   return (
     <form action={action} className="space-y-2">
@@ -18,6 +18,7 @@ export function AnalyzeForm({ autoFocus = false }: { autoFocus?: boolean }) {
           required
           maxLength={300}
           autoFocus={autoFocus}
+          defaultValue={initialUrl}
           placeholder="https://github.com/owner/repo"
           className="min-w-0 flex-1 rounded-md border border-border bg-panel px-3 py-2 font-mono text-sm outline-none focus:border-accent"
           aria-describedby={state.error ? "url-error" : undefined}

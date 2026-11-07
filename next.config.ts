@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   // the TypeScript compiler is large and loads its own lib files: keep it out of the bundle
-  serverExternalPackages: ["ts-morph", "typescript"],
+  serverExternalPackages: ["typescript"],
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

@@ -66,7 +66,7 @@ function RepoSummary() {
       <dl className="grid grid-cols-2 gap-2 text-xs">
         <Stat label="Files parsed" value={st.filesParsed} />
         <Stat label="Files skipped" value={st.filesSkipped} />
-        <Stat label="Imports drawn" value={st.imports.resolved} />
+        <Stat label="Imports resolved" value={st.imports.resolved} />
         <Stat label="External packages" value={st.imports.external} />
         <Stat label="Not resolved (with reason)" value={st.imports.skipped + st.imports.failed} />
         <Stat label="Lines" value={st.lines} />
