@@ -47,7 +47,7 @@ First release. **CartographAI: every connection, proven.**
 
 ### Install and docs
 - Claude Code plugin that installs a self-hosted copy:
-  `/plugin marketplace add VajraSarpa/cartograph`,
+  `/plugin marketplace add VajraSarpa/CartographAI`,
   `/plugin install cartographai@cartographai`, `/cartographai:install`.
   Keys are typed into your own terminal; Claude never sees them (#14).
 - Landing page, user guide, setup and deploy guides; animated README diagram
@@ -60,4 +60,4 @@ First release. **CartographAI: every connection, proven.**
   links; parsers read only inside the repository (#2).
 - Strict per-request nonce Content Security Policy (#5).
 
-[0.1.0]: https://github.com/VajraSarpa/cartograph/releases/tag/v0.1.0
+[0.1.0]: https://github.com/VajraSarpa/CartographAI/releases/tag/v0.1.0

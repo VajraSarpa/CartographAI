@@ -20,7 +20,7 @@ separately on LangSmith Deployments is optional (step 4).
 5. For production, create a production instance on your domain and use its keys.
 
 ## 3. Vercel (app)
-1. Import `VajraSarpa/cartograph`; framework Next.js; Node 22.
+1. Import `VajraSarpa/CartographAI`; framework Next.js; Node 22.
 2. Set env vars (Production + Preview) from `.env.local`:
    `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`,
    `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up`,
