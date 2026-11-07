@@ -1,7 +1,7 @@
 import path from "node:path";
 import ts from "typescript";
 import { decoratorName, type FileFacts } from "./extract";
-import type { FrameworkInfo, Route } from "./types";
+import type { FrameworkInfo, Route } from "cartograph-lang-api";
 
 /**
  * Framework adapters. Each one is a set of rules: detection evidence from a
@@ -38,7 +38,7 @@ const COMMON_ROLES: Record<string, string> = {
   "html-entry": "HTML script entries",
 };
 
-const ENTRY_ROLES = new Set([
+export const ENTRY_ROLES: ReadonlySet<string> = new Set([
   "test",
   "config",
   "package-entry",
@@ -55,10 +55,6 @@ const ENTRY_ROLES = new Set([
   "theme",
   "docs-page",
 ]);
-
-export function isEntryRole(role: string): boolean {
-  return ENTRY_ROLES.has(role);
-}
 
 function commonRoles(file: string, input: AdapterInput): string[] {
   const r: string[] = [];

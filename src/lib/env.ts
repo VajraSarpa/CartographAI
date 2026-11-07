@@ -9,6 +9,29 @@ const url = z.url({ protocol: /^https?$/ });
 /** an empty value (`AGENT_URL=`) means "not set" */
 const optionalUrl = z.preprocess((v) => (v === "" ? undefined : v), url.optional());
 
+/**
+ * Enabled languages, comma-separated, in priority order. Built-in ids load
+ * directly; any other id is the npm package cartograph-lang-<id>, which must
+ * be installed (checked when the parser starts, see src/parser/languages).
+ */
+export const languagesSchema = z
+  .string()
+  .default("typescript")
+  .transform((v) => v.split(",").map((s) => s.trim()).filter(Boolean))
+  .pipe(
+    z
+      .array(z.string().regex(/^[a-z][a-z0-9-]*$/, "language ids are lowercase letters, digits and dashes, e.g. typescript,python"))
+      .min(1, "list at least one language, e.g. typescript")
+      .refine((ids) => new Set(ids).size === ids.length, "a language is listed twice"),
+  );
+
+/** Just the language list, for tools that run without the rest of the environment (pnpm parse). */
+export function languagesFromEnv(env: NodeJS.ProcessEnv = process.env): string[] {
+  const parsed = z.object({ CARTOGRAPH_LANGUAGES: languagesSchema }).safeParse(env);
+  if (!parsed.success) throw new Error(`CARTOGRAPH_LANGUAGES is invalid:\n${formatEnvIssues(parsed.error)}`);
+  return parsed.data.CARTOGRAPH_LANGUAGES;
+}
+
 export const publicSchema = z.object({
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().regex(/^pk_(test|live)_/, "must start with pk_test_ or pk_live_"),
   NEXT_PUBLIC_SUPABASE_URL: url,
@@ -39,6 +62,7 @@ export const serverSchema = publicSchema.extend({
   LIMIT_ANALYSES_PER_DAY: z.coerce.number().int().positive().default(30),
   LIMIT_EXPLAINS_PER_DAY: z.coerce.number().int().positive().default(200),
   LIMIT_ASKS_PER_DAY: z.coerce.number().int().positive().default(100),
+  CARTOGRAPH_LANGUAGES: languagesSchema,
 });
 
 export type ServerEnv = z.infer<typeof serverSchema>;

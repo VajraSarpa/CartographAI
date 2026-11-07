@@ -1,7 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-export const CODE_EXTENSIONS = [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs"];
 const IGNORED_DIRS = new Set(["node_modules", ".git"]);
 /** Files bigger than this are listed as skipped, never silently dropped. */
 export const MAX_FILE_BYTES = 1_000_000;
@@ -13,6 +12,7 @@ export interface WalkedFile {
 }
 
 export interface WalkResult {
+  /** files some enabled language claims */
   code: WalkedFile[];
   /** every non-ignored file path (posix rel), used to explain asset imports */
   allFiles: Set<string>;
@@ -22,20 +22,14 @@ export function toPosix(p: string): string {
   return p.split(path.sep).join("/");
 }
 
-export function isCodeFile(rel: string): boolean {
-  return CODE_EXTENSIONS.some((e) => rel.endsWith(e));
-}
-
-export function isDeclarationFile(rel: string): boolean {
-  return /\.d\.[cm]?ts$/.test(rel) || /\.d\.[^.]+\.ts$/.test(rel);
-}
-
 /**
  * Walk a directory without following symlinks (untrusted input: a symlink
  * could point anywhere on the host). Symlinks are not code files we can read.
  */
 export async function walk(
   root: string,
+  /** true for files an enabled language owns */
+  isCode: (rel: string) => boolean,
   maxFiles = 50_000,
   /** real sizes for files that were written as placeholders */
   sizeOverrides?: Map<string, number>,
@@ -65,7 +59,7 @@ export async function walk(
       if (allFiles.size > maxFiles) {
         throw new Error(`Repository has more than ${maxFiles} files; refusing to parse.`);
       }
-      if (isCodeFile(rel)) {
+      if (isCode(rel)) {
         const st = await fs.lstat(abs);
         code.push({ rel, abs, bytes: sizeOverrides?.get(rel) ?? st.size });
       }

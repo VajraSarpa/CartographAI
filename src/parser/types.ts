@@ -1,11 +1,12 @@
 // Pure data types shared by the parser, graph math, storage and UI.
 // This module must stay free of runtime imports.
 
+import type { FrameworkInfo, ImportKind, ImportStatus } from "cartograph-lang-api";
+
 export const PARSER_VERSION = 3;
 
-export type ImportKind = "import" | "reexport" | "dynamic" | "require" | "import-equals";
-
-export type ImportStatus = "resolved" | "external" | "skipped" | "failed";
+// Shared with language plug-ins: defined once, in the plug-in contract.
+export type { FrameworkInfo, ImportKind, ImportStatus, Route } from "cartograph-lang-api";
 
 export interface ImportRecord {
   /** importing file, posix path relative to repo root */
@@ -50,27 +51,6 @@ export interface FileNode {
 export interface SkippedFile {
   path: string;
   reason: string;
-}
-
-export interface Route {
-  method: string;
-  path: string;
-  file: string;
-  line: number;
-}
-
-export interface FrameworkInfo {
-  id: "nextjs" | "nestjs" | "docusaurus" | "react" | "express" | "none";
-  name: string;
-  /** what in the repo proved it, e.g. "package.json dependency next" */
-  evidence: string | null;
-  /** role id -> human label, in display order */
-  roles: Record<string, string>;
-  routes: Route[];
-  /** true if this framework has an exact-or-absent route rule */
-  supportsRoutes: boolean;
-  /** other frameworks governing parts of a monorepo */
-  others: { id: FrameworkInfo["id"]; name: string; evidence: string; files: number }[];
 }
 
 export interface ParseStats {

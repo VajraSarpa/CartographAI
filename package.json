@@ -25,6 +25,7 @@
     "@supabase/supabase-js": "^2.119.0",
     "@xyflow/react": "^12.12.1",
     "cartograph-agent": "workspace:*",
+    "cartograph-lang-api": "workspace:*",
     "elkjs": "^0.12.1",
     "jose": "^6.2.15",
     "langsmith": "^0.11.8",

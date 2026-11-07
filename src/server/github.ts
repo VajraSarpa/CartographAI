@@ -3,7 +3,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { Parser, type ReadEntry } from "tar";
-import { CODE_EXTENSIONS, MAX_FILE_BYTES } from "@/parser/walk";
+import { MAX_FILE_BYTES } from "@/parser/walk";
 import { serverEnv } from "@/lib/env";
 
 export { parseRepoUrl, type RepoRef } from "@/lib/repo-url";
@@ -85,9 +85,6 @@ export async function fetchRepoMeta(owner: string, name: string, ref: string | n
   return { owner: meta.owner?.login ?? owner, name: meta.name ?? name, defaultBranch: meta.default_branch ?? useRef, sha, ref: useRef };
 }
 
-const KEEP_CONTENT = (rel: string) =>
-  CODE_EXTENSIONS.some((e) => rel.endsWith(e)) || rel.endsWith(".json") || rel.endsWith(".html");
-
 export interface ExtractStats {
   entries: number;
   written: number;
@@ -100,11 +97,16 @@ export interface ExtractStats {
  * Stream the archive straight into a hand-checked extractor:
  * - only regular files and directories (no symlinks, hard links, devices)
  * - every path must stay inside `dest` after normalisation
- * - only code, JSON and HTML get their content written; every other file is a
+ * - only files an enabled language claims or reads get their content written; every other file is a
  *   zero-byte placeholder so imports of assets still resolve as "asset"
  * - hard caps on archive size, entry count and bytes written
  */
-export async function downloadAndExtract(meta: RepoMeta, dest: string): Promise<ExtractStats> {
+export async function downloadAndExtract(
+  meta: RepoMeta,
+  dest: string,
+  /** files whose content the enabled languages need (code, plus configs they read) */
+  keepContent: (rel: string) => boolean,
+): Promise<ExtractStats> {
   const url = `https://codeload.github.com/${encodeURIComponent(meta.owner)}/${encodeURIComponent(meta.name)}/tar.gz/${meta.sha}`;
   let res: Response;
   try {
@@ -158,9 +160,9 @@ export async function downloadAndExtract(meta: RepoMeta, dest: string): Promise<
           entry.resume(); // symlinks, links, devices, fifos: never materialised
           return;
         }
-        const keep = KEEP_CONTENT(rel) && entry.size <= MAX_FILE_BYTES;
+        const keep = keepContent(rel) && entry.size <= MAX_FILE_BYTES;
         if (!keep) {
-          if (KEEP_CONTENT(rel)) stats.oversized.set(rel, entry.size);
+          if (keepContent(rel)) stats.oversized.set(rel, entry.size);
           entry.resume();
           writes.push(ensureDir(path.dirname(target)).then(() => writeFile(target, "")));
           return;
