@@ -301,18 +301,12 @@ map. Folders are boxes. Lines are imports. An import line exists only when
 the parser found a real import that points at a real file: nothing is
 guessed.</p>
 <h2 id="1-start-it-on-your-computer">1. Start it on your computer</h2>
-<p>You need two terminals, both in the project folder. Use Node 22: run
-<code>nvm use 22</code> first if your terminal defaults to an older version.</p>
-<p><strong>Terminal 1, the app:</strong></p>
-<pre class="hl"><code class="language-bash"><span class="nb">cd</span><span class="w"> </span>~/Projects/CartogrphAI/cartograph
-pnpm<span class="w"> </span>dev
+<p>Use Node 22: run <code>nvm use 22</code> first if your terminal defaults to an older
+version. In the project folder:</p>
+<pre class="hl"><code class="language-bash">pnpm<span class="w"> </span>dev
 </code></pre>
-<p><strong>Terminal 2, the Ask agent</strong> (only needed for the Ask tab):</p>
-<pre class="hl"><code class="language-bash"><span class="nb">cd</span><span class="w"> </span>~/Projects/CartogrphAI/cartograph
-pnpm<span class="w"> </span>dev:agent
-</code></pre>
-<p>Open <strong><a href="http://localhost:3000">http://localhost:3000</a></strong>. To stop either one, click its terminal and
-press <strong>Ctrl+C</strong>.</p>
+<p>Open <strong><a href="http://localhost:3000">http://localhost:3000</a></strong>. The Ask agent runs inside the app, so one
+terminal is enough. To stop it, click the terminal and press <strong>Ctrl+C</strong>.</p>
 <p>Once CartographAI is deployed, you skip this step and use its web address
 instead.</p>
 <h2 id="2-sign-in-and-pick-your-team">2. Sign in and pick your team</h2>

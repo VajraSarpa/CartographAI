@@ -1,0 +1,9 @@
+{
+  "name": "cartographai",
+  "version": "0.1.0",
+  "description": "Guided install for CartographAI: clones the repo, installs it, walks you through the accounts and keys it needs, and starts it.",
+  "author": { "name": "Vajra Sarpa" },
+  "homepage": "https://github.com/VajraSarpa/cartograph",
+  "repository": "https://github.com/VajraSarpa/cartograph",
+  "keywords": ["cartographai", "install", "setup", "dependency-graph"]
+}

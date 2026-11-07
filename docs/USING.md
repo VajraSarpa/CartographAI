@@ -12,25 +12,15 @@ guessed.
 
 ## 1. Start it on your computer
 
-You need two terminals, both in the project folder. Use Node 22: run
-`nvm use 22` first if your terminal defaults to an older version.
-
-**Terminal 1, the app:**
+Use Node 22: run `nvm use 22` first if your terminal defaults to an older
+version. In the project folder:
 
 ```bash
-cd ~/Projects/CartogrphAI/cartograph
 pnpm dev
 ```
 
-**Terminal 2, the Ask agent** (only needed for the Ask tab):
-
-```bash
-cd ~/Projects/CartogrphAI/cartograph
-pnpm dev:agent
-```
-
-Open **http://localhost:3000**. To stop either one, click its terminal and
-press **Ctrl+C**.
+Open **http://localhost:3000**. The Ask agent runs inside the app, so one
+terminal is enough. To stop it, click the terminal and press **Ctrl+C**.
 
 Once CartographAI is deployed, you skip this step and use its web address
 instead.

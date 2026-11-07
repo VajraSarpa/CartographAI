@@ -45,10 +45,10 @@ const GROUPS: Group[] = [
   },
   {
     id: "langsmith",
-    name: "LangSmith",
+    name: "LangSmith (optional: tracing and evals)",
     where: "smith.langchain.com -> Settings -> API Keys (US region)",
     fields: [
-      { key: "LANGSMITH_API_KEY", label: "API key", secret: true, validate: /^lsv2_/ },
+      { key: "LANGSMITH_API_KEY", label: "API key", secret: true, optional: true, validate: /^lsv2_/ },
       { key: "LANGSMITH_PROJECT", label: "Tracing project", default: "cartograph" },
       { key: "LANGSMITH_ENDPOINT", label: "Endpoint", default: "https://api.smith.langchain.com" },
     ],

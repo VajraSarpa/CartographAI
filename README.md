@@ -12,6 +12,34 @@ Every connection on the map comes from parsing real code: the TypeScript
 compiler for TS/JS, tree-sitter plus Python's import rules for Python. The AI only explains what the parser proved, and every explanation
 is checked for paths it was not shown.
 
+## Install with Claude Code
+
+Host your own copy with a guided install. In Claude Code (terminal, or a
+local session in the desktop app):
+
+```text
+/plugin marketplace add VajraSarpa/cartograph
+/plugin install cartographai@cartographai
+/cartographai:install
+```
+
+With Claude Code 2.1.275 or later, the first two lines can be one:
+`/plugin install cartographai --marketplace VajraSarpa/cartograph`.
+
+The installer runs these steps:
+1. Checks Node 22, Git and pnpm.
+2. Clones the repo and installs it.
+3. Walks you through the accounts it needs, one at a time. Clerk, Supabase
+   and Anthropic are required; LangSmith, a GitHub token and Vercel are
+   optional.
+4. Has you type each key into your own terminal (`pnpm env:setup`, hidden
+   input). Claude never sees a key.
+5. Verifies every key, then starts the app.
+
+Expect about 30–45 minutes, mostly spent creating accounts. Only Anthropic
+costs money (pay per use; $10 of credit is plenty to try it). The steps it
+follows are in [docs/SETUP.md](docs/SETUP.md).
+
 ## Stack
 
 Next.js 16 (App Router, Cache Components) · Clerk (teams) · Supabase (Postgres,

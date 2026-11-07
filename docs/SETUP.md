@@ -72,9 +72,11 @@ Site: console.anthropic.com
    (`sk-ant-…`) is shown once, so leave the page open until you have entered
    it.
 
-## 4. LangSmith
+## 4. LangSmith (optional)
 
 Site: smith.langchain.com (US region)
+
+Only needed for tracing and evals. Skip it and the app runs the same.
 
 Settings → **API Keys** → **Create API Key** → **Personal Access Token**.
 Copy the key (`lsv2_…`). It is shown once.
@@ -97,7 +99,7 @@ quickly hit GitHub's limit of 60 anonymous requests an hour.
 In a terminal (the VS Code terminal works):
 
 ```bash
-cd ~/Projects/CartogrphAI/cartograph
+cd path/to/cartograph
 pnpm env:setup
 ```
 
@@ -116,8 +118,14 @@ pnpm env:doctor
 Vercel needs nothing yet. Once the keys are in:
 
 1. `pnpm env:check` confirms every key with its service.
-2. `pnpm agent key` generates the agent's signing key. You import it once in
-   Supabase (Project Settings → JWT Keys → **Create standby key** → import
-   the private key), then the file is deleted.
-3. End-to-end test: sign in, analyze a repo, map, Explain, Ask.
-4. Deploy the app to Vercel and the agent to LangSmith.
+2. `pnpm agent key` generates the signing key the Ask tab needs. You import
+   it once in Supabase (Project Settings → JWT Keys → **Create standby key**
+   → import the private key), then delete the file. `pnpm agent check`
+   confirms it worked (after you have analyzed one repository).
+3. `pnpm dev`, then the end-to-end test: sign in, analyze a repo, map,
+   Explain, Ask.
+4. Optional: deploy to Vercel (see `docs/DEPLOY.md`). Ask runs inside the
+   app, so there is nothing else to deploy.
+
+With Claude Code you can let the installer walk you through all of this:
+see "Install with Claude Code" in the README.

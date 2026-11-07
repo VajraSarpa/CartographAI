@@ -1,0 +1,13 @@
+{
+  "name": "cartographai",
+  "owner": { "name": "Vajra Sarpa" },
+  "description": "CartographAI: every connection, proven. Installs and sets up a self-hosted copy.",
+  "plugins": [
+    {
+      "name": "cartographai",
+      "source": "./plugins/cartographai",
+      "description": "Guided install for CartographAI: clones the repo, installs it, walks you through the accounts and keys it needs, and starts it.",
+      "category": "development"
+    }
+  ]
+}
