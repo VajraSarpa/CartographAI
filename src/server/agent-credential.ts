@@ -19,7 +19,8 @@ function loadKeys() {
   keys ??= (async () => {
     const env = serverEnv();
     if (!env.AGENT_SIGNING_KEY) throw new Error("AGENT_SIGNING_KEY is not set (run `pnpm agent key`)");
-    const pem = env.AGENT_SIGNING_KEY.replace(/\\n/g, "\n");
+    // accept real newlines or literal "\n" (how dashboards usually store it)
+    const pem = env.AGENT_SIGNING_KEY.replace(/\\+n/g, "\n").replace(/\\(?=\n)/g, "");
     const priv = await importPKCS8(pem, "ES256", { extractable: true });
     const jwk = await exportJWK(priv);
     const { d: _d, ...pubJwk } = jwk;

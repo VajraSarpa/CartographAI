@@ -8,7 +8,7 @@ if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 
 async function main() {
   const { runPipeline, startAnalysis } = await import("../src/server/pipeline");
-  const { ensureOrgRow } = await import("../src/server/session");
+  const { ensureOrgRow } = await import("../src/server/org");
   const { adminDb } = await import("../src/server/supabase");
   const args = process.argv.slice(2);
   const url = args.find((a) => !a.startsWith("--"));

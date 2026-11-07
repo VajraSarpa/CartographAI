@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:agent": "pnpm -C cartograph-agent exec langgraphjs dev --no-browser --port 2024",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -47,6 +48,6 @@
   },
   "packageManager": "pnpm@12.16.1",
   "engines": {
-    "node": ">=20.9"
+    "node": ">=22"
   }
 }

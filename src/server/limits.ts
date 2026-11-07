@@ -1,7 +1,7 @@
 import "server-only";
 import { serverEnv } from "@/lib/env";
 import { adminDb } from "./supabase";
-import type { OrgSession } from "./session";
+import type { OrgSession } from "./org";
 
 export type UsageKind = "analyze" | "explain" | "ask";
 

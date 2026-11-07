@@ -9,7 +9,7 @@ import { serverEnv } from "@/lib/env";
 import { downloadAndExtract, fetchRepoMeta, PipelineError } from "./github";
 import { adminDb } from "./supabase";
 import { checkLimit, recordUsage } from "./limits";
-import type { OrgSession } from "./session";
+import type { OrgSession } from "./org";
 
 export type Step = "fetch" | "select" | "parse" | "store";
 
