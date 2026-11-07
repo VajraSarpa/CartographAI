@@ -137,13 +137,23 @@ async function doctor(): Promise<boolean> {
     console.log(`  ${g.name}: ${states.join(", ")}`);
   }
   for (const k of ["AGENT_URL", "AGENT_SIGNING_KEY", "AGENT_SIGNING_KID", "APP_URL"]) console.log(`  ${k}: ${env.get(k) ? "set" : "not set"}`);
+  let languagesOk = true;
+  try {
+    const { loadLanguages } = await import("../src/parser/languages");
+    const { languagesFromEnv } = await import("../src/lib/env");
+    const langs = await loadLanguages(languagesFromEnv(merged));
+    console.log(`  CARTOGRAPH_LANGUAGES: ${langs.map((l) => `${l.id} (${l.name})`).join(", ")}`);
+  } catch (e) {
+    languagesOk = false;
+    console.log(`  CARTOGRAPH_LANGUAGES: ${(e as Error).message}`);
+  }
   if (!parsed.success) {
     console.log("\nProblems:");
     for (const i of parsed.error.issues) console.log(`  - ${i.path.join(".")}: ${i.message}`);
   } else console.log("\nAll required values present.");
   const ignored = existsSync(".gitignore") && /^\.env\*/m.test(readFileSync(".gitignore", "utf8"));
   console.log(`.env files git-ignored: ${ignored ? "yes" : "NO - fix .gitignore"}`);
-  return parsed.success && ignored;
+  return parsed.success && ignored && languagesOk;
 }
 
 async function probe(name: string, fn: () => Promise<Response>, ok = (r: Response) => r.ok): Promise<boolean> {

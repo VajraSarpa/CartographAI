@@ -3,7 +3,7 @@
 
 import type { FrameworkInfo, ImportKind, ImportStatus } from "cartograph-lang-api";
 
-export const PARSER_VERSION = 3;
+export const PARSER_VERSION = 4;
 
 // Shared with language plug-ins: defined once, in the plug-in contract.
 export type { FrameworkInfo, ImportKind, ImportStatus, Route } from "cartograph-lang-api";
@@ -37,6 +37,8 @@ export interface FileNode {
   /** folder the file lives in ("." for the root) */
   module: string;
   ext: string;
+  /** id of the language plug-in that parsed it, e.g. "typescript" (maps from parser v3 and older lack it) */
+  language: string;
   lines: number;
   bytes: number;
   hash: string;

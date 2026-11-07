@@ -15,8 +15,7 @@ const optionalUrl = z.preprocess((v) => (v === "" ? undefined : v), url.optional
  * be installed (checked when the parser starts, see src/parser/languages).
  */
 export const languagesSchema = z
-  .string()
-  .default("typescript")
+  .preprocess((v) => (v === "" ? undefined : v), z.string().default("typescript"))
   .transform((v) => v.split(",").map((s) => s.trim()).filter(Boolean))
   .pipe(
     z
@@ -26,7 +25,7 @@ export const languagesSchema = z
   );
 
 /** Just the language list, for tools that run without the rest of the environment (pnpm parse). */
-export function languagesFromEnv(env: NodeJS.ProcessEnv = process.env): string[] {
+export function languagesFromEnv(env: Record<string, string | undefined> = process.env): string[] {
   const parsed = z.object({ CARTOGRAPH_LANGUAGES: languagesSchema }).safeParse(env);
   if (!parsed.success) throw new Error(`CARTOGRAPH_LANGUAGES is invalid:\n${formatEnvIssues(parsed.error)}`);
   return parsed.data.CARTOGRAPH_LANGUAGES;

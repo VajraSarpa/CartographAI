@@ -85,6 +85,7 @@ export async function parseRepo(root: string, opts: ParseOptions = {}): Promise<
       path: f.rel,
       module: path.posix.dirname(f.rel),
       ext: path.posix.extname(f.rel),
+      language: lang.id,
       lines,
       bytes: f.bytes,
       hash: createHash("sha256").update(buf).digest("hex").slice(0, 16),

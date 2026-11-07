@@ -42,3 +42,6 @@ next-env.d.ts
 /.preview/
 .agent-signing-key.jwk.json
 !.env.example
+
+# built language plug-ins
+/packages/*/dist
