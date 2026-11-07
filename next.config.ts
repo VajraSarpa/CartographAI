@@ -14,9 +14,14 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   // the TypeScript compiler is large and loads its own lib files: keep it out of the bundle
-  serverExternalPackages: ["typescript"],
-  // the Ask agent ships as TypeScript source in the cartograph-agent workspace package
-  transpilePackages: ["cartograph-agent"],
+  // tree-sitter loads its WASM files from its own package folder at runtime: keep them external too
+  serverExternalPackages: ["typescript", "web-tree-sitter", "tree-sitter-python"],
+  // the Ask agent and the Python plug-in ship as TypeScript source in workspace packages
+  transpilePackages: ["cartograph-agent", "cartograph-lang-python"],
+  // the WASM grammars are read from disk, so tell file tracing to ship them
+  outputFileTracingIncludes: {
+    "/**": ["./node_modules/web-tree-sitter/tree-sitter.wasm", "./node_modules/tree-sitter-python/tree-sitter-python.wasm"],
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

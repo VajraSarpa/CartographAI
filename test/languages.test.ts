@@ -72,7 +72,7 @@ describe("loadLanguages", () => {
   });
 
   it("fails loudly, naming the package to install", async () => {
-    await expect(loadLanguages(["typescript", "python"], importer({}))).rejects.toThrow(/cartograph-lang-python could not be loaded \(run `pnpm add cartograph-lang-python`\)/);
+    await expect(loadLanguages(["typescript", "ruby"], importer({}))).rejects.toThrow(/cartograph-lang-ruby could not be loaded \(run `pnpm add cartograph-lang-ruby`\)/);
   });
 
   it("rejects packages that are not plug-ins, or are for another id or API version", async () => {
@@ -85,8 +85,9 @@ describe("loadLanguages", () => {
 });
 
 describe("CARTOGRAPH_LANGUAGES", () => {
-  it("defaults to typescript and reads a comma-separated list", () => {
-    expect(languagesFromEnv({})).toEqual(["typescript"]);
+  it("defaults to typescript and python, and reads a comma-separated list", () => {
+    expect(languagesFromEnv({})).toEqual(["typescript", "python"]);
+    expect(languagesFromEnv({ CARTOGRAPH_LANGUAGES: "" })).toEqual(["typescript", "python"]);
     expect(languagesFromEnv({ CARTOGRAPH_LANGUAGES: " typescript, python " })).toEqual(["typescript", "python"]);
   });
 

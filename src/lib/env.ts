@@ -15,7 +15,7 @@ const optionalUrl = z.preprocess((v) => (v === "" ? undefined : v), url.optional
  * be installed (checked when the parser starts, see src/parser/languages).
  */
 export const languagesSchema = z
-  .preprocess((v) => (v === "" ? undefined : v), z.string().default("typescript"))
+  .preprocess((v) => (v === "" ? undefined : v), z.string().default("typescript,python"))
   .transform((v) => v.split(",").map((s) => s.trim()).filter(Boolean))
   .pipe(
     z

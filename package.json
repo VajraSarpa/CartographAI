@@ -26,6 +26,7 @@
     "@xyflow/react": "^12.12.1",
     "cartograph-agent": "workspace:*",
     "cartograph-lang-api": "workspace:*",
+    "cartograph-lang-python": "workspace:*",
     "elkjs": "^0.12.1",
     "jose": "^6.2.15",
     "langsmith": "^0.11.8",
@@ -34,7 +35,9 @@
     "react-dom": "19.3.0",
     "server-only": "^0.0.1",
     "tar": "^7.5.22",
+    "tree-sitter-python": "0.25.0",
     "typescript": "~5.9.3",
+    "web-tree-sitter": "0.25.10",
     "zod": "^4.6.7"
   },
   "devDependencies": {

@@ -114,5 +114,7 @@ export interface LanguagePlugin {
    * fetcher keeps these alongside code files; everything else is dropped.
    */
   needsFile?(rel: string): boolean;
+  /** Optional one-time async setup (e.g. loading a WASM grammar). Awaited before `open`. */
+  init?(): Promise<void>;
   open(repo: RepoView): LanguageSession;
 }

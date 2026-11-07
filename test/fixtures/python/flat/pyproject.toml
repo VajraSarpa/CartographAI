@@ -1,0 +1,7 @@
+[project]
+name = "flatpkg"
+version = "0.1.0"
+dependencies = ["requests>=2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

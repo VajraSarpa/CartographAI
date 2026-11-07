@@ -5,7 +5,7 @@ toc: true
 theme: cyan
 ---
 
-Cartograph turns a public TypeScript or JavaScript repository on GitHub into a
+Cartograph turns a public TypeScript, JavaScript or Python repository on GitHub into a
 map. Folders are boxes. Lines are imports. An import line exists only when
 the parser found a real import that points at a real file: nothing is
 guessed.
