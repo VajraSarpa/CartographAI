@@ -61,7 +61,28 @@ easy for people self-hosting it.
 - README section plus a template package documenting the interface. Hosted
   users install nothing; this is for self-hosters.
 
-## Step 2: Python (`packages/lang-python`, in this pnpm workspace, on by default)
+## Step 2: Python (`packages/lang-python`, in this pnpm workspace, on by default): done
+
+Built on branch `claude/compassionate-bell-ibaaa5`. What's in it:
+- Parser: tree-sitter WASM (`web-tree-sitter` 0.25.10, `tree-sitter-python`
+  0.25.0, no native build). Both are also root dependencies so the server can
+  resolve the WASM at runtime. See `next.config.ts`.
+- Resolver: `packages/lang-python/src/resolve.ts`. Project and root discovery:
+  `src/project.ts`. The rules are summarised in README "How Python imports
+  are resolved".
+- Tested against the owner's rupa (hatch, src) and slack-kb (uv_build, src,
+  `from conftest import`), plus fixtures in `test/fixtures/python/` for flat,
+  src and multi-package layouts. slack-kb is private: none of its code is in
+  this repo. Also checked by hand: requests, flask, django (3,000 files in
+  about 9 s).
+- `PARSER_VERSION` is 5. The Explain and Ask prompts now say "code repository"
+  instead of "TypeScript/JavaScript repository" (the only language-specific
+  line). Evals were not re-run.
+- Not verified: the WASM loading on Vercel. It works in `next build`, the
+  files are in the file trace, and Node resolves them from the bundled chunk.
+  Try one analysis on the PR's preview deployment before merging.
+
+Original brief:
 
 - Parse with `tree-sitter-python` (the WASM build works on Vercel). Model the
   resolver on grimp / import-linter.

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: { absolute: "Cartograph: a map of any TypeScript or JavaScript repo" },
+  title: { absolute: "Cartograph: a map of any TypeScript, JavaScript or Python repo" },
 };
 
 const FRAMEWORKS = [
@@ -65,7 +65,7 @@ export default function Home() {
       <main className="mx-auto max-w-5xl space-y-24 px-6 pb-24">
         <section className="grid items-center gap-10 pt-10 md:grid-cols-[1fr_auto]">
           <div className="space-y-6">
-            <h1 className="text-4xl font-semibold leading-tight tracking-tight md:text-5xl">A map of any TypeScript or JavaScript repo.</h1>
+            <h1 className="text-4xl font-semibold leading-tight tracking-tight md:text-5xl">A map of any TypeScript, JavaScript or Python repo.</h1>
             <p className="max-w-[46ch] text-lg text-muted">
               Paste a public GitHub URL. Folders become boxes, imports become lines. Select a file to see what imports it and what breaks two steps out.
             </p>
@@ -94,7 +94,7 @@ export default function Home() {
           <h2 className="text-2xl font-semibold">How it works</h2>
           <ol className="grid gap-6 md:grid-cols-3">
             {[
-              ["Parse", "The TypeScript compiler reads every import, re-export, dynamic import and require, and resolves each one with your tsconfig."],
+              ["Parse", "Real parsers read every import and resolve it the way your tools do: the TypeScript compiler with your tsconfig, and Python's import rules with your pyproject.toml."],
               ["Map", "Folders fold into boxes sized by how much depends on them. Click one to open its files. Selecting lights up neighbours."],
               ["Ask", "Explain a file from its real neighbours, or ask the repo a question. Every answer comes from the graph, through tools you can watch."],
             ].map(([t, d], i) => (
@@ -110,7 +110,7 @@ export default function Home() {
         <section className="space-y-6">
           <h2 className="text-2xl font-semibold">Supported frameworks</h2>
           <p className="max-w-[64ch] text-muted">
-            Any TypeScript or JavaScript repository maps. When a framework is detected from a package.json, its files also get roles by rule, and
+            Any TypeScript, JavaScript or Python repository maps. When a framework is detected from a package.json, its files also get roles by rule, and
             routes appear when the code spells out both the method and the full path.
           </p>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

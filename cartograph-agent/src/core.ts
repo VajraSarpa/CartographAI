@@ -26,7 +26,7 @@ export const contextSchema = z.object({
 });
 type Ctx = ToolRuntime<unknown, typeof contextSchema>;
 
-const SYSTEM = `You answer questions about one TypeScript/JavaScript repository that Cartograph has parsed into an import graph.
+const SYSTEM = `You answer questions about one code repository that Cartograph has parsed into an import graph.
 
 How to work:
 - Use the tools. Every connection you state (what imports what, what breaks) must come from tool results. Never infer a connection from a file name or convention.

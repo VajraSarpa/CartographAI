@@ -3,7 +3,7 @@
 
 import type { FrameworkInfo, ImportKind, ImportStatus } from "cartograph-lang-api";
 
-export const PARSER_VERSION = 4;
+export const PARSER_VERSION = 5;
 
 // Shared with language plug-ins: defined once, in the plug-in contract.
 export type { FrameworkInfo, ImportKind, ImportStatus, Route } from "cartograph-lang-api";

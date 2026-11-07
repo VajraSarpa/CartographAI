@@ -1,0 +1,4 @@
+[project]
+name = "acme_api"
+version = "0.1.0"
+dependencies = ["Acme.Core>=0.1"]

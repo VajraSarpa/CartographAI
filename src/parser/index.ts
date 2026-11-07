@@ -39,6 +39,7 @@ export async function parseRepo(root: string, opts: ParseOptions = {}): Promise<
   root = path.resolve(root);
   const languages = opts.languages ?? [typescriptPlugin];
   if (languages.length === 0) throw new Error("parseRepo: no languages enabled");
+  for (const l of languages) await l.init?.();
   const owner = (rel: string) => languages.find((l) => l.claims(rel));
   const { code, allFiles } = await walk(root, (rel) => owner(rel) !== undefined, opts.maxFiles, opts.sizeOverrides);
   const repo = repoView(root, allFiles);

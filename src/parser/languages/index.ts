@@ -1,12 +1,14 @@
 import type { LanguagePlugin } from "cartograph-lang-api";
+import { pythonPlugin } from "cartograph-lang-python";
 import { typescriptPlugin } from "./typescript";
 
 /** Languages that ship with Cartograph. Anything else is the npm package cartograph-lang-<id>. */
 export const BUILTIN_LANGUAGES: Record<string, LanguagePlugin> = {
   typescript: typescriptPlugin,
+  python: pythonPlugin,
 };
 
-export const DEFAULT_LANGUAGES = ["typescript"];
+export const DEFAULT_LANGUAGES = ["typescript", "python"];
 
 /** ids are lowercase so the package name can be built from them */
 export const LANGUAGE_ID = /^[a-z][a-z0-9-]*$/;

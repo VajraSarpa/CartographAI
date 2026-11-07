@@ -16,7 +16,7 @@ const MAX_LIST = 60;
 const MAX_SOURCE_BYTES = 60_000;
 
 // Frozen system prompt: identical bytes on every call, so it is cached.
-export const SYSTEM = `You explain one file or folder of a TypeScript/JavaScript repository to a developer who is new to it.
+export const SYSTEM = `You explain one file or folder of a code repository to a developer who is new to it.
 
 You receive facts produced by a static parser (the import graph) and, for files, the file's source.
 Everything you say about connections must come from those facts.

@@ -11,7 +11,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: { default: "Cartograph", template: "%s · Cartograph" },
-  description: "Paste a public TypeScript or JavaScript repo and get a map: folders are boxes, imports are lines.",
+  description: "Paste a public TypeScript, JavaScript or Python repo and get a map: folders are boxes, imports are lines.",
 };
 
 // The CSP (src/proxy.ts) allows only scripts carrying this request's nonce
