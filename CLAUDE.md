@@ -30,7 +30,9 @@ what breaks two levels out. Ask for an explanation. Ask the repo a question.
 - Next.js 16 App Router (async request APIs, `proxy.ts` not `middleware.ts`),
   Clerk (orgs), Supabase (Postgres + RLS + realtime), TypeScript compiler-API parser,
   React Flow + ELK layout, Anthropic Claude for Explain and the agent,
-  LangSmith for tracing/evals and agent hosting. Deployed on Vercel.
+  LangSmith for tracing/evals. The Ask agent (`cartograph-agent/`) runs
+  in-process; AGENT_URL optionally points at a separate LangGraph server.
+  Deployed on Vercel.
 
 ## Commands
 - `pnpm dev` / `pnpm build` / `pnpm test` / `pnpm lint` / `pnpm typecheck`

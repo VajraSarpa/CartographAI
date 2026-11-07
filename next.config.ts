@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // the TypeScript compiler is large and loads its own lib files: keep it out of the bundle
   serverExternalPackages: ["typescript"],
+  // the Ask agent ships as TypeScript source in the cartograph-agent workspace package
+  transpilePackages: ["cartograph-agent"],
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
