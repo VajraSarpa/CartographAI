@@ -1,4 +1,4 @@
-# Next: verify frameworks in production, then evals
+# Next: Rust language plug-in
 
 Handoff for the next working session (updated 2026-11-07). Read `CLAUDE.md`
 first; its rules apply to everything below.
@@ -34,16 +34,35 @@ first; its rules apply to everything below.
 
 ## Next steps
 
-1. **Verify Python frameworks in production** (owner, from a browser).
+1. **Rust language plug-in** (cloud session). Full spec:
+   [docs/specs/lang-rust.md](specs/lang-rust.md), approved by the owner;
+   don't re-open its "Decisions already made" table. Work in three PRs:
+   - **PR 1, the plug-in:** `packages/lang-rust`, built in and on by default.
+     It covers the Cargo crates, the module tree, path resolution, roles,
+     fixtures and tests, and bumps `PARSER_VERSION` to 7. Check before
+     anything else that the Rust grammar's WASM loads in `web-tree-sitter`
+     0.25.10.
+   - **PR 2, frameworks:** Axum, Actix Web and Rocket routes, exact or absent.
+   - **PR 3, docs and copy:** everywhere that lists the supported languages,
+     plus a CHANGELOG entry.
+   - Phase 2 (`#[cfg]` condition tags on lines) changes the contract. Ask
+     the owner before starting it.
+   - Test on ripgrep, axum, bat and tokio with `pnpm parse --json`, and put
+     the counts in each PR.
+2. **Verify Python frameworks in production** (owner, from a browser).
    Analyze `https://github.com/pallets/flask`. Expect "Flask" with routes
    like `GET /auth/login` and `POST /auth/register` (the tutorial app).
-2. **Evals.** The Explain and Ask prompts changed ("code repository" instead
+3. **Evals.** The Explain and Ask prompts changed ("code repository" instead
    of "TypeScript/JavaScript repository") and evals have never been run
    against Claude. Ask the owner first: they spend API credit.
-3. **Production Clerk instance.** Clerk is a development instance; production
+4. **Production Clerk instance.** Clerk is a development instance; production
    needs a custom domain and its own GitHub OAuth app.
 
 ## Done (for context)
+
+- **v0.1.0 released** (2026-11-07): `CHANGELOG.md`, tag `v0.1.0`, GitHub
+  Release. CodeRabbit config in `.coderabbit.yaml`, which encodes the
+  CLAUDE.md rules as review instructions.
 
 - **Plug-in interface.** Contract in `packages/lang-api/index.d.ts`, TS/JS
   plug-in in `src/parser/languages/typescript/`, loader in
