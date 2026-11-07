@@ -1,6 +1,6 @@
 # Cartograph
 
-Sign in with GitHub, paste a public TypeScript/JavaScript repo URL, get a map:
+Sign in with GitHub, paste a public TypeScript, JavaScript or Python repo URL, get a map:
 folders are boxes, imports are lines. Select a file to see what imports it and
 what breaks two levels out. Ask for an explanation. Ask the repo a question.
 
@@ -31,7 +31,8 @@ what runs without keys).
 
 ## Stack
 - Next.js 16 App Router (async request APIs, `proxy.ts` not `middleware.ts`),
-  Clerk (orgs), Supabase (Postgres + RLS + realtime), TypeScript compiler-API parser,
+  Clerk (orgs), Supabase (Postgres + RLS + realtime), language plug-ins (TS/JS via
+  the TypeScript compiler API, Python via tree-sitter WASM; `packages/lang-*`),
   React Flow + ELK layout, Anthropic Claude for Explain and the agent,
   LangSmith for tracing/evals. The Ask agent (`cartograph-agent/`) runs
   in-process; AGENT_URL optionally points at a separate LangGraph server.

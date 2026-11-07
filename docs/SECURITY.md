@@ -19,9 +19,13 @@ read nothing.
 **Untrusted repositories.** Archives are pinned to a commit, streamed through a
 hand-checked extractor (regular files and directories only; no symlinks or
 hard links; no path escapes; caps on archive size, entries and bytes written);
-only code/JSON/HTML content is written. The parser never follows symlinks,
-resolves modules through a host that cannot read outside the repository, and
-never executes repository code. Repository source shown to the agent is
+only content an enabled language needs is written (code files, plus the
+configs it reads: JSON/HTML for TS/JS; pyproject.toml, setup.cfg,
+requirements*.txt and run-command files for Python). The parser never follows
+symlinks, gives language plug-ins only a size-capped view that cannot read
+outside the repository, rejects any "resolved" import whose target is not a
+file in the repository, and never executes repository code (Python is read
+with tree-sitter, never imported or run). Repository source shown to the agent is
 labelled untrusted; the agent's tools are read-only and scoped to one analysis.
 
 **Web.** Strict per-request nonce CSP (`strict-dynamic`, `frame-ancestors

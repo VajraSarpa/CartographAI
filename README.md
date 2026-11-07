@@ -11,7 +11,8 @@ is checked for paths it was not shown.
 ## Stack
 
 Next.js 16 (App Router, Cache Components) · Clerk (teams) · Supabase (Postgres,
-RLS, Realtime) · TypeScript compiler API parser · React Flow + ELK · Claude
+RLS, Realtime) · language plug-ins: TypeScript compiler API for TS/JS,
+tree-sitter (WASM) for Python · React Flow + ELK · Claude
 (Anthropic API) · LangSmith (tracing, evals) · LangChain/LangGraph JS agent in
 `cartograph-agent/`, run inside the app (or as a separate LangGraph server) · Vercel.
 
