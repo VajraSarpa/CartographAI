@@ -68,5 +68,13 @@ first; its rules apply to everything below.
 
 ## GitHub "About" text (owner sets this on github.com)
 
-Map any TypeScript, JavaScript or Python repo: folders are boxes, imports are
-lines. Every line is a real, resolved import.
+Product name: **CartographAI**, tagline "Every connection, proven." (owner's
+choice, 2026-11-07). The repo URL stays `VajraSarpa/cartograph`.
+
+> CartographAI: every connection, proven. Paste a public TypeScript,
+> JavaScript or Python repo and get a map: folders are boxes, imports are
+> lines. See what breaks before you change a file, then ask the repo a
+> question.
+
+The Clerk application's name (shown on the sign-in screen) is set in the
+Clerk dashboard, not in code.

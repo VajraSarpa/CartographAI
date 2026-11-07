@@ -1,6 +1,6 @@
 # cartograph-lang-python
 
-Python for Cartograph, built in and on by default. Imports are read with
+Python for CartographAI, built in and on by default. Imports are read with
 tree-sitter (WASM, so there is no native build) and resolved the way
 Python's import system would, over the folders the repo declares. See
 "How Python imports are resolved" in the main README.

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-labelledby="t d">
-  <title id="t">How Cartograph works</title>
+  <title id="t">How CartographAI works: every connection, proven</title>
   <desc id="d">A GitHub repository is fetched, every import is parsed and resolved to a real file, folders become boxes and imports become lines. Selecting app/api.py highlights the files that import it in green and the files it imports in amber, and Ask answers "what breaks" from the graph.</desc>
   <style>
     :root { --bg:#ffffff; --panel:#f6f8fa; --border:#d0d7de; --fg:#1f2328; --muted:#59636e; --accent:#0e7490; --in:#1a7f37; --out:#bc4c00; --edge:#8c959f; }

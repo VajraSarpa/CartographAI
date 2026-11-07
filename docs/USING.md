@@ -1,11 +1,11 @@
 ---
-title: Using Cartograph
+title: Using CartographAI
 subtitle: Start it, map a repository, and read what the map tells you
 toc: true
 theme: cyan
 ---
 
-Cartograph turns a public TypeScript, JavaScript or Python repository on GitHub into a
+CartographAI turns a public TypeScript, JavaScript or Python repository on GitHub into a
 map. Folders are boxes. Lines are imports. An import line exists only when
 the parser found a real import that points at a real file: nothing is
 guessed.
@@ -32,7 +32,7 @@ pnpm dev:agent
 Open **http://localhost:3000**. To stop either one, click its terminal and
 press **Ctrl+C**.
 
-Once Cartograph is deployed, you skip this step and use its web address
+Once CartographAI is deployed, you skip this step and use its web address
 instead.
 
 ## 2. Sign in and pick your team
@@ -111,7 +111,7 @@ With a file selected, the right panel has two buttons:
   **Nothing imports these**.
 
 "Nothing imports these" does not mean "unused". Tests, scripts and config
-files are often run by tools, not imported. Cartograph never grades code
+files are often run by tools, not imported. CartographAI never grades code
 quality: the graph cannot know.
 
 ### The numbers in the Overview
@@ -133,7 +133,7 @@ and its place on the map, and writes a short plain-English explanation.
 - The first time takes a few seconds. After that the same explanation
   returns instantly, marked **From cache (no model call)**.
 - Claude may only name files it was shown. If it names a path it was not
-  shown, Cartograph strikes it through and labels it **Not in the map**.
+  shown, CartographAI strikes it through and labels it **Not in the map**.
 - **Explain again** asks for a fresh one.
 
 ## 6. Ask (AI agent)

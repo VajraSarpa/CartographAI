@@ -1,5 +1,5 @@
 ---
-title: Cartograph account setup
+title: CartographAI account setup
 subtitle: What to create in each service, where each key lives, and how to enter it
 toc: true
 theme: cyan
@@ -15,7 +15,7 @@ Site: dashboard.clerk.com
 
 ### Set up
 
-1. **Create application.** Name it "Cartograph". Under sign-in options, tick
+1. **Create application.** Name it "CartographAI". Under sign-in options, tick
    **GitHub** (you can untick Email) and click Create.
 2. **Turn on teams.** Configure → **Organizations** → Enable. Leave personal
    accounts allowed, so team membership stays optional.
