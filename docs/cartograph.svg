@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-labelledby="t d">
+  <title id="t">How Cartograph works</title>
+  <desc id="d">A GitHub repository is fetched, every import is parsed and resolved to a real file, folders become boxes and imports become lines. Selecting app/api.py highlights the files that import it in green and the files it imports in amber, and Ask answers "what breaks" from the graph.</desc>
+  <style>
+    :root { --bg:#ffffff; --panel:#f6f8fa; --border:#d0d7de; --fg:#1f2328; --muted:#59636e; --accent:#0e7490; --in:#1a7f37; --out:#bc4c00; --edge:#8c959f; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --fg:#e6edf3; --muted:#9198a1; --accent:#22d3ee; --in:#3fb950; --out:#f0883e; --edge:#6e7681; }
+    }
+    text { font-family: ui-sans-serif, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: var(--fg); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+    .small { font-size: 12px; fill: var(--muted); }
+    .h { font-size: 14px; font-weight: 600; }
+    .step { font-size: 12px; font-weight: 600; fill: var(--accent); letter-spacing: .04em; }
+    .box { fill: var(--panel); stroke: var(--border); stroke-width: 1.5; }
+    .row { fill: var(--bg); stroke: var(--border); }
+    .arrow { stroke: var(--border); stroke-width: 2; fill: none; }
+    .dot { fill: var(--accent); }
+    .edge { stroke: var(--edge); stroke-width: 2; fill: none; stroke-dasharray: 220; stroke-dashoffset: 220; animation: draw 12s ease-in-out infinite; }
+    .in { stroke: var(--in); stroke-width: 3; fill: none; }
+    .out { stroke: var(--out); stroke-width: 3; fill: none; }
+
+    .a-repo   { animation: repo 12s ease-in-out infinite; }
+    .a-dot1   { animation: dot1 12s linear infinite; }
+    .a-parse  { animation: parse 12s ease-in-out infinite; }
+    .a-dot2   { animation: dot2 12s linear infinite; }
+    .a-map    { animation: map 12s ease-in-out infinite; }
+    .a-select { animation: select 12s ease-in-out infinite; }
+    .a-q      { animation: q 12s ease-in-out infinite; }
+    .a-ans    { animation: ans 12s ease-in-out infinite; }
+
+    @keyframes repo   { 0% { opacity: 0 } 5%, 93% { opacity: 1 } 99%, 100% { opacity: 0 } }
+    @keyframes dot1   { 0%, 7% { opacity: 0; transform: translateX(0) } 8% { opacity: 1 } 17% { opacity: 1; transform: translateX(62px) } 18%, 100% { opacity: 0; transform: translateX(62px) } }
+    @keyframes parse  { 0%, 15% { opacity: 0.15 } 20%, 93% { opacity: 1 } 99%, 100% { opacity: 0.15 } }
+    @keyframes dot2   { 0%, 23% { opacity: 0; transform: translateX(0) } 24% { opacity: 1 } 32% { opacity: 1; transform: translateX(52px) } 33%, 100% { opacity: 0; transform: translateX(52px) } }
+    @keyframes map    { 0%, 31% { opacity: 0 } 36%, 93% { opacity: 1 } 99%, 100% { opacity: 0 } }
+    @keyframes draw   { 0%, 37% { stroke-dashoffset: 220 } 49%, 93% { stroke-dashoffset: 0; opacity: 1 } 99%, 100% { stroke-dashoffset: 0; opacity: 0 } }
+    @keyframes select { 0%, 54% { opacity: 0 } 59%, 93% { opacity: 1 } 99%, 100% { opacity: 0 } }
+    @keyframes q      { 0%, 66% { opacity: 0 } 70%, 93% { opacity: 1 } 99%, 100% { opacity: 0 } }
+    @keyframes ans    { 0%, 74% { opacity: 0 } 79%, 93% { opacity: 1 } 99%, 100% { opacity: 0 } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .a-repo, .a-parse, .a-map, .a-select, .a-q, .a-ans { animation: none; opacity: 1 }
+      .a-dot1, .a-dot2 { animation: none; opacity: 0 }
+      .edge { animation: none; stroke-dashoffset: 0 }
+    }
+  </style>
+
+  <rect width="960" height="420" style="fill: var(--bg)"/>
+
+  <!-- step labels -->
+  <text class="step" x="20" y="34">1  FETCH</text>
+  <text class="step" x="300" y="34">2  PARSE</text>
+  <text class="step" x="530" y="34">3  MAP · SELECT · ASK</text>
+
+  <!-- 1. repository -->
+  <g class="a-repo">
+    <rect class="box" x="20" y="60" width="210" height="250" rx="10"/>
+    <text class="h" x="36" y="88">github.com/acme/shop</text>
+    <text class="mono" x="36" y="122">app/main.py</text>
+    <text class="mono" x="36" y="148">app/api.py</text>
+    <text class="mono" x="36" y="174">lib/auth.py</text>
+    <text class="mono" x="36" y="200">lib/db.py</text>
+    <text class="mono" x="36" y="226">tests/test_api.py</text>
+    <text class="mono" x="36" y="252">scripts/seed.py</text>
+    <text class="small" x="36" y="290">public repo, pinned to a commit</text>
+  </g>
+
+  <path class="arrow" d="M236 185 H294"/>
+  <circle class="dot a-dot1" cx="236" cy="185" r="5"/>
+
+  <!-- 2. parse -->
+  <g class="a-parse">
+    <rect class="box" x="300" y="115" width="170" height="140" rx="10"/>
+    <text class="h" x="316" y="142">Parse every import</text>
+    <text class="small" x="316" y="166">TypeScript compiler</text>
+    <text class="small" x="316" y="184">tree-sitter (Python)</text>
+    <text class="small" x="316" y="214">resolved to a real file,</text>
+    <text class="small" x="316" y="232">or listed with a reason</text>
+  </g>
+
+  <path class="arrow" d="M476 185 H524"/>
+  <circle class="dot a-dot2" cx="476" cy="185" r="5"/>
+
+  <!-- 3. map: folders are boxes -->
+  <g class="a-map">
+    <rect class="box" x="530" y="60" width="170" height="110" rx="10"/>
+    <text class="h" x="544" y="82">app/</text>
+    <rect class="row" x="540" y="94" width="150" height="26" rx="5"/>
+    <text class="mono" x="550" y="112">main.py</text>
+    <rect class="row" x="540" y="128" width="150" height="26" rx="5"/>
+    <text class="mono" x="550" y="146">api.py</text>
+
+    <rect class="box" x="770" y="60" width="170" height="110" rx="10"/>
+    <text class="h" x="784" y="82">lib/</text>
+    <rect class="row" x="780" y="94" width="150" height="26" rx="5"/>
+    <text class="mono" x="790" y="112">auth.py</text>
+    <rect class="row" x="780" y="128" width="150" height="26" rx="5"/>
+    <text class="mono" x="790" y="146">db.py</text>
+
+    <rect class="box" x="530" y="200" width="170" height="74" rx="10"/>
+    <text class="h" x="544" y="222">tests/</text>
+    <rect class="row" x="540" y="236" width="150" height="26" rx="5"/>
+    <text class="mono" x="550" y="254">test_api.py</text>
+
+    <rect class="box" x="770" y="200" width="170" height="74" rx="10"/>
+    <text class="h" x="784" y="222">scripts/</text>
+    <rect class="row" x="780" y="236" width="150" height="26" rx="5"/>
+    <text class="mono" x="790" y="254">seed.py</text>
+  </g>
+
+  <!-- imports are lines -->
+  <path class="edge" d="M540 107 C 516 107 516 141 540 141"/>
+  <path class="edge" d="M690 141 C 735 141 735 107 780 107"/>
+  <path class="edge" d="M690 141 H 780"/>
+  <path class="edge" d="M930 107 C 954 107 954 141 930 141"/>
+  <path class="edge" d="M615 236 V 154"/>
+  <path class="edge" d="M855 236 V 154"/>
+
+  <!-- select app/api.py -->
+  <g class="a-select">
+    <rect x="540" y="128" width="150" height="26" rx="5" style="fill: none; stroke: var(--accent); stroke-width: 2.5"/>
+    <path class="in" d="M540 107 C 516 107 516 141 540 141"/>
+    <path class="in" d="M615 236 V 154"/>
+    <path class="out" d="M690 141 C 735 141 735 107 780 107"/>
+    <path class="out" d="M690 141 H 780"/>
+    <text class="h" x="20" y="346">Selected: <tspan class="mono">app/api.py</tspan></text>
+    <circle cx="26" cy="368" r="5" style="fill: var(--in)"/>
+    <text class="small" x="38" y="372">files that import it</text>
+    <circle cx="26" cy="390" r="5" style="fill: var(--out)"/>
+    <text class="small" x="38" y="394">files it imports</text>
+  </g>
+
+  <!-- ask -->
+  <g class="a-q">
+    <rect class="box" x="530" y="296" width="410" height="104" rx="10"/>
+    <text class="h" x="546" y="322">What breaks if I change app/api.py?</text>
+  </g>
+  <g class="a-ans">
+    <text x="546" y="350" font-size="13">Two files import it directly:</text>
+    <text class="mono" x="546" y="372">app/main.py · tests/test_api.py</text>
+    <text class="small" x="546" y="392">answered from the graph, naming only real paths</text>
+  </g>
+</svg>

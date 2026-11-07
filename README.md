@@ -4,6 +4,8 @@ Paste a public TypeScript, JavaScript or Python GitHub repository and get a map:
 are boxes, imports are lines. Select a file to see what imports it and what
 breaks two steps out. Ask for an explanation, or ask the repo a question.
 
+![How Cartograph works: a repository is fetched, every import is parsed and resolved, folders become boxes and imports become lines, a selected file shows what imports it and what it imports, and Ask answers from the graph](docs/cartograph.svg)
+
 Every connection on the map comes from parsing real code: the TypeScript
 compiler for TS/JS, tree-sitter plus Python's import rules for Python. The AI only explains what the parser proved, and every explanation
 is checked for paths it was not shown.
