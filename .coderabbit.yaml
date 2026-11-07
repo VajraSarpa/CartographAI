@@ -1,0 +1,47 @@
+# CodeRabbit review settings for CartographAI.
+# Rules come from CLAUDE.md ("Never" and "Layout of the code").
+language: en-US
+reviews:
+  profile: chill
+  path_filters:
+    - "!pnpm-lock.yaml"
+    - "!docs/*.html"
+    - "!test/fixtures/**"
+    - "!**/node_modules/**"
+  path_instructions:
+    - path: "**/*"
+      instructions: |
+        This repo is public. Flag anything that looks like a secret, key or token.
+        Never suggest scores, grades or code-quality ratings in product features.
+    - path: "src/parser/**"
+      instructions: |
+        Parsing code takes data in and returns data. It must not import Next.js,
+        React or the database client. An edge exists only when an import resolved
+        to a real file: flag any edge inferred from a file name, convention or guess.
+        Unresolved imports must be kept with a reason, never dropped.
+    - path: "src/graph/**"
+      instructions: |
+        Pure data code: no Next.js, React or database imports. No inferred edges.
+    - path: "packages/lang-*/**"
+      instructions: |
+        Language plug-ins follow the cartograph-lang-api contract. Every import gets
+        exactly one of resolved / external / skipped / failed, with a reason for the
+        last two. Routes only when the HTTP method and full path are both literal in code.
+        Python import roots come only from what the repo declares; no guessed sys.path.
+    - path: "src/server/**"
+      instructions: |
+        Authorization belongs in Supabase RLS policies, not app-side filtering.
+        Identity comes from the token, which carries the organization; nothing should
+        call the identity provider at runtime. The AI may only name files it was shown.
+    - path: "src/components/**"
+      instructions: |
+        Browser components must not import the parser or file-system code.
+    - path: "src/lib/env.ts"
+      instructions: |
+        Missing environment variables must fail loudly at startup.
+    - path: "supabase/migrations/**"
+      instructions: |
+        Every table needs RLS enabled with policies scoped to the token's organization.
+  auto_review:
+    enabled: true
+    drafts: false
