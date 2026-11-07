@@ -1,5 +1,5 @@
 import ts from "typescript";
-import type { ImportKind } from "./types";
+import type { ImportKind } from "cartograph-lang-api";
 
 export interface RawImport {
   specifier: string;

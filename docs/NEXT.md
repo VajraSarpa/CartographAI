@@ -26,7 +26,23 @@ first; its rules apply to everything below.
 - How to talk to the owner: one specific question at a time, plain English,
   say which way you'd go and why.
 
-## Step 1: a language plug-in interface (no behaviour change)
+## Step 1: a language plug-in interface (no behaviour change): done
+
+Built on branch `claude/compassionate-bell-ibaaa5`. What's in it:
+- Contract: `packages/lang-api/index.d.ts` (`cartograph-lang-api`, types only).
+- TS/JS plug-in: `src/parser/languages/typescript/`. The core is in `src/parser/index.ts`.
+- Before/after `pnpm parse --json` was byte-identical on Excalidraw, Express
+  and test/fixtures. After that, the only change was `language` per file and
+  `PARSER_VERSION` 4.
+- Loader: `src/parser/languages/index.ts`. Env var: `CARTOGRAPH_LANGUAGES` in
+  `src/lib/env.ts`. Template: `packages/lang-template`.
+- Not verified: a third-party plug-in on Vercel. It works under `next build`
+  plus a local run, and in `pnpm parse`. Vercel's file tracing may not pick
+  up a package that is only loaded by name. Python is a workspace package, so
+  register it in `BUILTIN_LANGUAGES` (a static import) rather than loading it
+  by name.
+
+Original brief:
 
 Requirement from the owner: the repo is public, so adding a language must be
 easy for people self-hosting it.

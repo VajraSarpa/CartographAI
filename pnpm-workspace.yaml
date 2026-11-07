@@ -1,5 +1,6 @@
 packages:
   - cartograph-agent
+  - packages/*
 
 allowBuilds:
   sharp: false

@@ -181,6 +181,9 @@ importers:
       cartograph-agent:
         specifier: workspace:*
         version: link:cartograph-agent
+      cartograph-lang-api:
+        specifier: workspace:*
+        version: link:packages/lang-api
       elkjs:
         specifier: ^0.12.1
         version: 0.12.1
@@ -269,6 +272,17 @@ importers:
         version: 26.6.6
       typescript:
         specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/lang-api: {}
+
+  packages/lang-template:
+    devDependencies:
+      cartograph-lang-api:
+        specifier: workspace:*
+        version: link:../lang-api
+      typescript:
+        specifier: ~5.9.3
         version: 5.9.3
 
 packages:

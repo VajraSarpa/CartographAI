@@ -3,6 +3,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { parseRepo } from "@/parser";
+import { loadLanguages } from "@/parser/languages";
 import { PARSER_VERSION } from "@/parser/types";
 import { parseRepoUrl } from "@/lib/repo-url";
 import { serverEnv } from "@/lib/env";
@@ -94,14 +95,15 @@ export async function runPipeline(args: { runId: string; analysisId: string; org
   };
   const dir = await mkdtemp(path.join(tmpdir(), "cartograph-"));
   try {
-    serverEnv();
+    const languages = await loadLanguages(serverEnv().CARTOGRAPH_LANGUAGES);
     await setStep("fetch");
     const meta = await fetchRepoMeta(args.owner, args.name, args.ref);
-    const extracted = await downloadAndExtract(meta, dir);
+    const extracted = await downloadAndExtract(meta, dir, (rel) => languages.some((l) => l.claims(rel) || !!l.needsFile?.(rel)));
 
     await setStep("select", { entries: extracted.entries, bytes: extracted.written, sha: meta.sha });
     let lastReport = 0;
     const map = await parseRepo(dir, {
+      languages,
       sizeOverrides: extracted.oversized,
       onProgress: (done, total) => {
         if (done - lastReport >= 250) {

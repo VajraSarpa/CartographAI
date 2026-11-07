@@ -1,15 +1,9 @@
 import path from "node:path";
-import { readFileSync } from "node:fs";
 import ts from "typescript";
-import { isCodeFile, isDeclarationFile, toPosix } from "./walk";
-import type { ImportStatus } from "./types";
+import { isCodeFile, isDeclarationFile, toPosix } from "./files";
+import type { RepoView, Resolution } from "cartograph-lang-api";
 
-export interface Resolution {
-  status: ImportStatus;
-  to?: string;
-  pkg?: string;
-  reason?: string;
-}
+export type { Resolution };
 
 interface ConfigEntry {
   options: ts.CompilerOptions;
@@ -19,11 +13,14 @@ interface ConfigEntry {
 }
 
 const MAX_CONFIG_BYTES = 256_000;
+const VIRTUAL_ROOT = path.resolve("/__cartograph_repo__");
 
 /**
  * Resolves import specifiers the way TypeScript does, using the nearest
  * tsconfig.json / jsconfig.json, but through a host that can only see files
- * inside the repository root. Untrusted repos cannot make us read the host.
+ * inside the repository. TypeScript works with absolute paths, so the repo is
+ * mounted at a virtual root that does not exist on disk; every read goes
+ * through RepoView. Untrusted repos cannot make us read the host.
  */
 export class Resolver {
   private readonly dirs = new Set<string>();
@@ -36,11 +33,12 @@ export class Resolver {
   /** framework-defined aliases, e.g. Docusaurus "@site/" -> site folder */
   private aliases: { prefix: string; dir: string; source: string }[] = [];
 
-  constructor(
-    private readonly root: string,
-    private readonly allFiles: Set<string>,
-  ) {
-    for (const f of allFiles) {
+  private readonly root = VIRTUAL_ROOT;
+  private readonly allFiles: ReadonlySet<string>;
+
+  constructor(private readonly repo: RepoView) {
+    this.allFiles = repo.files;
+    for (const f of this.allFiles) {
       let d = path.posix.dirname(f);
       while (d !== "." && !this.dirs.has(d)) {
         this.dirs.add(d);
@@ -57,12 +55,7 @@ export class Resolver {
       if (rel === null || !this.allFiles.has(rel)) return undefined;
       // Only JSON (package.json / tsconfig chains) is ever read through this host.
       if (!rel.endsWith(".json")) return undefined;
-      try {
-        const buf = readFileSync(path.join(this.root, rel));
-        return buf.length > MAX_CONFIG_BYTES ? undefined : buf.toString("utf8");
-      } catch {
-        return undefined;
-      }
+      return this.repo.readText(rel, MAX_CONFIG_BYTES) ?? undefined;
     };
     this.host = {
       fileExists,

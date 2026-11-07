@@ -35,5 +35,51 @@ pnpm dev:agent        # optional: agent as a LangGraph server on :2024
 | `pnpm agent key` / `pnpm agent check` | Agent signing key; prove forged credentials read nothing |
 | `pnpm test` / `pnpm test:rls` | Unit tests / RLS isolation tests (Docker or Podman) |
 
+## Languages
+
+Each language is a plug-in. TypeScript/JavaScript is built in. The graph,
+map, Explain and Ask don't know which language a file is in.
+
+If you use the hosted app, there is nothing to install. This section is for
+people hosting Cartograph themselves.
+
+Turn languages on with one variable. Order matters: when two languages claim
+the same file, the first one in the list gets it.
+
+```bash
+CARTOGRAPH_LANGUAGES=typescript            # the default
+CARTOGRAPH_LANGUAGES=typescript,ruby       # plus a third-party language
+```
+
+Any id that isn't built in is loaded from the npm package
+`cartograph-lang-<id>`. To add one, run `pnpm add cartograph-lang-ruby` and
+add `ruby` to the list. If a listed package is missing or isn't a valid
+plug-in, analysis fails and the error names the package. `pnpm env:doctor`
+shows which languages load.
+
+### Writing a language plug-in
+
+The contract is in [`packages/lang-api/index.d.ts`](packages/lang-api/index.d.ts)
+(types only). [`packages/lang-template`](packages/lang-template) is a complete
+working plug-in to copy. Its parts:
+
+| Part | What it does |
+|---|---|
+| `claims(path)` | Says whether the language owns this file |
+| `needsFile(path)` | Optional: config files it reads (e.g. `pyproject.toml`), so the fetcher keeps them |
+| `parse(path, text)` | Returns the imports in the file, with line numbers |
+| `resolve(from, specifier)` | Returns `resolved` plus a real file, or `external` / `skipped` / `failed` plus a reason |
+| `finish(parsed)` | Optional: framework, roles per file, and which roles are entry points |
+
+The core handles everything else the same way for every language: it walks
+the repo without following symlinks, skips large, binary and minified files
+(with a reason), builds edges, and counts fan-in and fan-out. It also checks
+the plug-in: a `resolved` import that points at a file not in the repo turns
+into `failed`. Plug-ins read the repo only through `RepoView`, which can't
+see anything outside the repo.
+
+The core loads packages with Node's own `import()`, so publish JavaScript
+(the template builds with `tsc`), not raw TypeScript.
+
 See [docs/DEPLOY.md](docs/DEPLOY.md) for deployment and [docs/SECURITY.md](docs/SECURITY.md)
 for the security model.
